@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Services — ELA | Enviable Logistics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --brand:#16305E;
+    --ink:#14161A;
+    --paper:#FFFFFF;
+    --line:#E7E8EB;
+    --muted:#6B7078;
+    --display:'Space Grotesk', sans-serif;
+    --body:'Inter', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{ font-family:var(--body); color:var(--ink); background:var(--paper); line-height:1.55; -webkit-font-smoothing:antialiased; }
+  img{max-width:100%; display:block;}
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 32px;}
+  h1,h2,h3{ font-family:var(--display); font-weight:600; letter-spacing:-0.01em; }
+  .eyebrow{ font-size:13px; font-weight:600; color:var(--brand); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:14px; }
+
+  .btn{ display:inline-flex; align-items:center; gap:8px; padding:13px 26px; border-radius:6px; font-weight:600; font-size:14.5px; border:1px solid transparent; cursor:pointer; transition:filter .15s ease, border-color .15s ease; }
+  .btn-primary{ background:var(--brand); color:#fff; }
+  .btn-primary:hover{ filter:brightness(1.22); }
+  .btn-ghost{ background:transparent; color:var(--ink); border-color:var(--line); }
+  .btn-ghost:hover{ border-color:var(--ink); }
+
+  header{ position:sticky; top:0; z-index:50; background:rgba(255,255,255,0.92); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); transition:box-shadow .25s ease; }
+  header.scrolled{ box-shadow:0 6px 20px -12px rgba(20,22,26,0.15); }
+  .nav{ display:flex; align-items:center; justify-content:space-between; height:72px; }
+  .logo{ display:inline-flex; align-items:center; }
+  .logo img{ height:26px; width:auto; display:block; }
+  nav ul{ display:flex; gap:34px; list-style:none; }
+  nav ul a{ font-size:14.5px; color:var(--muted); position:relative; padding-bottom:3px; }
+  nav ul a.active{ color:var(--ink); }
+  nav ul a::after{ content:""; position:absolute; left:0; bottom:0; width:0; height:1.5px; background:var(--brand); transition:width .2s ease; }
+  nav ul a:hover{ color:var(--ink); }
+  nav ul a:hover::after, nav ul a.active::after{ width:100%; }
+  .nav-actions{ display:flex; align-items:center; gap:12px; }
+
+  .page-hero{ padding:72px 0 56px; border-bottom:1px solid var(--line); }
+  .page-hero h1{ font-size:clamp(34px,4.4vw,50px); line-height:1.06; max-width:680px; margin-bottom:18px; }
+  .page-hero p{ font-size:17px; color:var(--muted); max-width:520px; }
+
+  /* card grid */
+  .svc-grid{ padding:64px 0 96px; display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
+  .svc-card{ position:relative; border-radius:14px; overflow:hidden; aspect-ratio:4/5; display:block; background:var(--ink); }
+  .svc-card img{ width:100%; height:124%; object-fit:cover; position:absolute; top:-12%; left:0; transition:transform .6s cubic-bezier(.16,1,.3,1); }
+  .svc-card:hover img{ transform:scale(1.08); }
+  .svc-card .overlay{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(20,22,26,0) 40%, rgba(20,22,26,0.88) 100%); }
+  .svc-card .content{ position:absolute; left:0; right:0; bottom:0; padding:24px; color:#fff; }
+  .svc-card .product-tag{ font-family:var(--display); font-size:11.5px; font-weight:600; color:#fff; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.35); border-radius:999px; padding:4px 11px; display:inline-block; margin-bottom:12px; backdrop-filter:blur(4px); }
+  .svc-card h3{ font-size:20px; margin-bottom:6px; }
+  .svc-card p{ font-size:13.5px; color:rgba(255,255,255,0.72); margin-bottom:14px; }
+  .svc-card .arrow{ width:34px; height:34px; border-radius:50%; border:1px solid rgba(255,255,255,0.4); display:flex; align-items:center; justify-content:center; transition:background .2s ease, transform .3s ease; }
+  .svc-card:hover .arrow{ background:#fff; transform:rotate(45deg); }
+  .svc-card:hover .arrow svg{ stroke:var(--ink); }
+  .svc-card .arrow svg{ stroke:#fff; transition:stroke .2s ease; }
+
+  .svc-card.wide{ grid-column:span 2; aspect-ratio:auto; }
+  .svc-card.wide .content{ padding:32px; }
+  .svc-card.wide h3{ font-size:26px; }
+
+  .cta-band{ background:var(--ink); color:#fff; padding:64px 0; }
+  .cta-band .wrap{ display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap; }
+  .cta-band h2{ font-size:clamp(24px,2.8vw,32px); color:#fff; }
+  .cta-band p{ color:rgba(255,255,255,0.65); margin-top:8px; }
+  .cta-band .btn-ghost{ border-color:rgba(255,255,255,0.3); color:#fff; }
+
+  footer{ padding:56px 0 32px; }
+  .footer-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px; margin-bottom:48px; }
+  .footer-grid h5{ font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:16px; }
+  .footer-grid ul{ list-style:none; }
+  .footer-grid li{ margin-bottom:10px; font-size:14.5px; }
+  .footer-grid a:hover{ color:var(--brand); }
+  .footer-bottom{ display:flex; justify-content:space-between; padding-top:28px; border-top:1px solid var(--line); font-size:13px; color:var(--muted); flex-wrap:wrap; gap:12px; }
+  .socials{ display:flex; gap:14px; }
+  .socials a{ width:30px; height:30px; border-radius:50%; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:12px; transition:border-color .15s ease, transform .15s ease; }
+  .socials a:hover{ border-color:var(--ink); transform:translateY(-2px); }
+
+  /* .reveal starts visible by default; JS hides+animates it only once GSAP
+     successfully initializes, so content is never stuck invisible if a
+     script/CDN fails. See the try/catch guard in the script below. */
+
+  .ela-cursor-dot, .ela-cursor-ring{ position:fixed; top:0; left:0; pointer-events:none; z-index:999; border-radius:50%; transform:translate(-100px,-100px); }
+  .ela-cursor-dot{ width:6px; height:6px; background:var(--ink); margin:-3px 0 0 -3px; }
+  .ela-cursor-ring{ width:34px; height:34px; margin:-17px 0 0 -17px; border:1px solid var(--ink); transition:width .25s ease, height .25s ease, margin .25s ease, border-color .25s ease, background .25s ease; display:flex; align-items:center; justify-content:center; }
+  .ela-cursor-ring.hover{ width:56px; height:56px; margin:-28px 0 0 -28px; background:var(--ink); }
+  .ela-cursor-ring.down{ width:26px; height:26px; margin:-13px 0 0 -13px; }
+  .ela-cursor-label{ font-family:var(--display); font-size:11px; font-weight:600; color:#fff; opacity:0; transition:opacity .2s ease; text-transform:uppercase; letter-spacing:0.04em; }
+  .ela-cursor-ring.has-label .ela-cursor-label{ opacity:1; }
+  @media (pointer: coarse){ .ela-cursor-dot, .ela-cursor-ring{ display:none; } }
+  html.ela-cursor-active, html.ela-cursor-active *{ cursor:none !important; }
+
+  @media (max-width:900px){
+    .svc-grid{ grid-template-columns:1fr 1fr; }
+    .svc-card.wide{ grid-column:span 2; }
+    .cta-band .wrap{ flex-direction:column; align-items:flex-start; }
+  }
+  @media (max-width:600px){
+    nav ul{ display:none; }
+    .wrap{ padding:0 20px; }
+    .svc-grid{ grid-template-columns:1fr; gap:18px; padding:40px 0 64px; }
+    .svc-card.wide{ grid-column:span 1; }
+    .footer-grid{ grid-template-columns:1fr 1fr; }
+  }
+  @media (max-width:520px){ .nav-actions{ gap:8px; } .nav-actions .btn{ white-space:nowrap; padding:10px 13px; font-size:13px; } }
+  .btn .short{ display:none; }
+  @media (max-width:980px){ .nav-actions .long{ display:none; } .nav-actions .short{ display:inline; } }
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="wrap nav">
+    <a href="index.html" class="logo"><img src="ela-logo-mark.png" alt="ELA - Enviable Logistics"></a>
+    <nav><ul>
+      <li><a href="about.html">About</a></li>
+      <li><a href="services.html" class="active">Services</a></li>
+      <li><a href="team.html">Team</a></li>
+      <li><a href="careers.html">Careers</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul></nav>
+    <div class="nav-actions">
+      <a href="index.html#contact" class="btn btn-ghost"><span class="long">Business partner account</span><span class="short">Partner account</span></a>
+      <a href="index.html#app" class="btn btn-primary">Download app</a>
+    </div>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow reveal">What we move</p>
+    <h1 class="reveal">Every service, one platform.</h1>
+    <p class="reveal">Bikes, buses, trucks and a dedicated express team, each running on the same live tracking underneath. Open a service for the full picture.</p>
+  </div>
+</section>
+
+<div class="wrap svc-grid">
+
+  <a href="service-detail.html?id=ela-haul" class="svc-card wide reveal" data-cursor="View">
+    <img src="https://images.unsplash.com/photo-1682033240184-262fdb8234cb?auto=format&fit=crop&w=1200&q=80" alt="Freight truck on the highway">
+    <div class="overlay"></div>
+    <div class="content">
+      <span class="product-tag">ELA HAUL</span>
+      <h3>Freight &amp; cargo transport</h3>
+      <p>Regional and long-haul truck freight, palletized or bulk.</p>
+      <span class="arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke-width="1.6" stroke-linecap="round"><path d="M3 11L11 3M11 3H4M11 3V10"/></svg></span>
+    </div>
+  </a>
+
+  <a href="service-detail.html?id=ela-click" class="svc-card reveal" data-cursor="View">
+    <img src="https://images.unsplash.com/photo-1779583350228-566db01e9049?auto=format&fit=crop&w=900&q=80" alt="Delivery rider on an electric bike">
+    <div class="overlay"></div>
+    <div class="content">
+      <span class="product-tag">ELA CLICK <span style="opacity:.8; font-weight:500;">+ Errand</span></span>
+      <h3>Last-mile parcels</h3>
+      <p>EV bikes for fast city-wide delivery.</p>
+      <span class="arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke-width="1.6" stroke-linecap="round"><path d="M3 11L11 3M11 3H4M11 3V10"/></svg></span>
+    </div>
+  </a>
+
+  <a href="service-detail.html?id=ela-transport" class="svc-card reveal" data-cursor="View">
+    <img src="https://images.unsplash.com/photo-1677843728721-7737722cff34?auto=format&fit=crop&w=900&q=80" alt="Interstate bus on the highway">
+    <div class="overlay"></div>
+    <div class="content">
+      <span class="product-tag">ELA TRANSPORT</span>
+      <h3>Interstate passenger travel</h3>
+      <p>Terminal-to-terminal travel, nationwide.</p>
+      <span class="arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke-width="1.6" stroke-linecap="round"><path d="M3 11L11 3M11 3H4M11 3V10"/></svg></span>
+    </div>
+  </a>
+
+  <a href="service-detail.html?id=ela-go" class="svc-card reveal" data-cursor="View">
+    <img src="https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&w=900&q=80" alt="Parcels ready for courier dispatch">
+    <div class="overlay"></div>
+    <div class="content">
+      <span class="product-tag">ELA GO</span>
+      <h3>Nationwide courier</h3>
+      <p>Door-to-door parcels, tracked end to end.</p>
+      <span class="arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke-width="1.6" stroke-linecap="round"><path d="M3 11L11 3M11 3H4M11 3V10"/></svg></span>
+    </div>
+  </a>
+
+  <a href="service-detail.html?id=ela-express" class="svc-card reveal" data-cursor="View">
+    <img src="https://images.unsplash.com/photo-1607273685680-6bd976c5a5ce?auto=format&fit=crop&w=900&q=80" alt="Rider on a motorcycle moving fast through the city">
+    <div class="overlay"></div>
+    <div class="content">
+      <span class="product-tag">ELA EXPRESS</span>
+      <h3>Priority express</h3>
+      <p>Urgent parcels, guaranteed window.</p>
+      <span class="arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke-width="1.6" stroke-linecap="round"><path d="M3 11L11 3M11 3H4M11 3V10"/></svg></span>
+    </div>
+  </a>
+
+</div>
+
+<div class="cta-band">
+  <div class="wrap">
+    <div>
+      <h2>Not sure which service fits?</h2>
+      <p>Tell us what you're moving — we'll route it to the right product.</p>
+    </div>
+    <div style="display:flex; gap:12px;">
+      <a href="book.html" class="btn btn-ghost">Book now</a>
+      <a href="index.html#contact" class="btn btn-primary" style="background:var(--brand);">Talk to the team</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <a href="index.html" class="logo" style="margin-bottom:14px;"><img src="ela-logo-mark.png" alt="ELA - Enviable Logistics" style="height:28px;"></a>
+        <p style="color:var(--muted); font-size:14px; max-width:260px;">Enviable Logistics Ltd — moving Lagos, Nigeria, and beyond, one tracked route at a time.</p>
+      </div>
+      <div><h5>Company</h5><ul><li><a href="about.html">About us</a></li><li><a href="services.html">Services</a></li><li><a href="team.html">Team</a></li><li><a href="careers.html">Careers</a></li><li><a href="index.html#contact">Contact us</a></li></ul></div>
+      <div><h5>Help &amp; support</h5><ul><li><a href="offices.html">Our offices</a></li><li><a href="book.html?tab=track">Track a shipment</a></li><li><a href="book.html?tab=manage">Manage booking</a></li><li><a href="tel:+2348038802353">Call us</a></li><li><a href="index.html#contact">Email us</a></li></ul></div>
+      <div>
+        <h5>Follow</h5>
+        <div class="socials">
+          <a href="#" aria-label="X">X</a>
+          <a href="https://www.instagram.com/enviablelogistics/" aria-label="Instagram">IG</a>
+          <a href="#" aria-label="Facebook">FB</a>
+          <a href="#" aria-label="YouTube">YT</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Enviable Logistics Ltd.</span>
+      <span style="display:flex; gap:18px;"><a href="#">Terms of Service</a><a href="#">Privacy &amp; Policy</a><a href="#">Account deletion</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', ()=>{
+    header.classList.toggle('scrolled', window.scrollY > 8);
+  }, {passive:true});
+
+  function showEverything(){
+    document.querySelectorAll('.reveal').forEach(el=> el.style.opacity = 1);
+  }
+
+  if(typeof gsap === 'undefined'){
+    showEverything();
+  } else if(reduceMotion){
+    gsap.set('.reveal', {opacity:1});
+  } else {
+    try {
+      gsap.registerPlugin(ScrollTrigger);
+
+      gsap.timeline({defaults:{ease:'power3.out'}})
+        .from('.page-hero .eyebrow', {opacity:0, y:12, duration:.5})
+        .from('.page-hero h1', {opacity:0, y:24, duration:.6}, '-=.3')
+        .from('.page-hero p:not(.eyebrow)', {opacity:0, y:14, duration:.5}, '-=.35');
+
+      gsap.utils.toArray('.svc-card').forEach((card, i)=>{
+        gsap.fromTo(card, {opacity:0, y:28}, {
+          opacity:1, y:0, duration:.6, delay:(i%3)*.06, ease:'power3.out',
+          scrollTrigger:{trigger:card, start:'top 92%'}
+        });
+      });
+
+      gsap.from('.cta-band .wrap > *', {
+        opacity:0, y:20, duration:.6, stagger:.1,
+        scrollTrigger:{trigger:'.cta-band', start:'top 85%'}
+      });
+
+      // ============================================================
+      // SCROLL-LINKED PARALLAX on the card photos.
+      // Alternating cards drift up vs down as you scroll, tied
+      // directly to scroll position (scrub), never autoplaying.
+      // ============================================================
+      gsap.utils.toArray('.svc-card img').forEach((img, i)=>{
+        const speed = (i % 2 === 0 ? -1 : 1) * (0.05 + (i % 3) * 0.02);
+        gsap.to(img, {
+          yPercent: speed * 100,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: img.closest('.svc-card'),
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 1.1
+          }
+        });
+      });
+
+    } catch(err){
+      console.error('ELA animation error — falling back to static visible content:', err);
+      showEverything();
+    }
+  }
+</script>
+<script src="site.js"></script>
+
+</body>
+</html>

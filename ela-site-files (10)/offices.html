@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Offices — ELA | Enviable Logistics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --brand:#16305E;
+    --ink:#14161A;
+    --paper:#FFFFFF;
+    --line:#E7E8EB;
+    --muted:#6B7078;
+    --display:'Space Grotesk', sans-serif;
+    --body:'Inter', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{ font-family:var(--body); color:var(--ink); background:var(--paper); line-height:1.55; -webkit-font-smoothing:antialiased; }
+  img{max-width:100%; display:block;}
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 32px;}
+  h1,h2,h3{ font-family:var(--display); font-weight:600; letter-spacing:-0.01em; }
+  .eyebrow{ font-size:13px; font-weight:600; color:var(--brand); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:14px; }
+
+  .btn{ display:inline-flex; align-items:center; gap:8px; padding:13px 26px; border-radius:6px; font-weight:600; font-size:14.5px; border:1px solid transparent; cursor:pointer; transition:filter .15s ease, border-color .15s ease, transform .15s ease; }
+  .btn-primary{ background:var(--brand); color:#fff; }
+  .btn-primary:hover{ filter:brightness(1.22); transform:translateY(-1px); }
+  .btn-ghost{ background:transparent; color:var(--ink); border-color:var(--line); }
+  .btn-ghost:hover{ border-color:var(--ink); transform:translateY(-1px); }
+
+  header{ position:sticky; top:0; z-index:50; background:rgba(255,255,255,0.92); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); transition:box-shadow .25s ease; }
+  header.scrolled{ box-shadow:0 6px 20px -12px rgba(20,22,26,0.15); }
+  .nav{ display:flex; align-items:center; justify-content:space-between; height:72px; }
+  .logo{ display:inline-flex; align-items:center; }
+  .logo img{ height:26px; width:auto; display:block; }
+  nav ul{ display:flex; gap:34px; list-style:none; }
+  nav ul a{ font-size:14.5px; color:var(--muted); position:relative; padding-bottom:3px; }
+  nav ul a::after{ content:""; position:absolute; left:0; bottom:0; width:0; height:1.5px; background:var(--brand); transition:width .2s ease; }
+  nav ul a:hover{ color:var(--ink); }
+  nav ul a:hover::after{ width:100%; }
+  .nav-actions{ display:flex; align-items:center; gap:12px; }
+
+  .page-hero{ padding:72px 0 44px; border-bottom:1px solid var(--line); }
+  .page-hero h1{ font-size:clamp(34px,4.4vw,50px); line-height:1.06; max-width:680px; margin-bottom:18px; }
+  .page-hero p{ font-size:17px; color:var(--muted); max-width:560px; }
+
+  /* state jump nav */
+  .state-nav{ position:sticky; top:72px; z-index:40; background:#fff; border-bottom:1px solid var(--line); padding:16px 0; overflow-x:auto; }
+  .state-nav .wrap{ display:flex; gap:10px; }
+  .state-nav a{ flex-shrink:0; font-size:13px; font-weight:600; color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:7px 15px; white-space:nowrap; transition:border-color .2s ease, color .2s ease, background .2s ease; }
+  .state-nav a:hover{ color:var(--ink); border-color:var(--ink); }
+  .state-nav a.active{ color:#fff; background:var(--brand); border-color:var(--brand); }
+
+  /* office groups */
+  .offices-section{ padding:56px 0 96px; }
+  .office-group{ padding:40px 0; border-bottom:1px solid var(--line); scroll-margin-top:140px; }
+  .office-group:last-child{ border-bottom:none; }
+  .office-group-title{ font-size:12.5px; font-weight:700; color:var(--brand); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:20px; }
+  .office-cards{ display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:18px; }
+  .office-card{ border:1px solid var(--line); border-radius:12px; padding:22px; transition:transform .3s cubic-bezier(.22,1,.36,1), border-color .3s ease; }
+  .office-card:hover{ transform:translateY(-4px); border-color:var(--brand); }
+  .office-card .oc-label{ font-size:12px; font-weight:600; color:var(--brand); margin-bottom:8px; }
+  .office-card .oc-addr{ font-size:14px; color:var(--ink); margin-bottom:12px; line-height:1.5; }
+  .office-card .oc-phones{ display:flex; flex-wrap:wrap; gap:8px 14px; }
+  .office-card .oc-phones a{ font-size:13.5px; font-weight:600; color:var(--ink); display:inline-flex; align-items:center; gap:6px; }
+  .office-card .oc-phones a:hover{ color:var(--brand); }
+  .office-card .oc-phones svg{ width:13px; height:13px; stroke:var(--brand); flex-shrink:0; }
+  .office-card .oc-nophone{ font-size:13px; color:var(--muted); font-style:italic; }
+
+  .cta-band{ background:var(--ink); color:#fff; padding:64px 0; }
+  .cta-band .wrap{ display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap; }
+  .cta-band h2{ font-size:clamp(24px,2.8vw,32px); color:#fff; }
+  .cta-band p{ color:rgba(255,255,255,0.65); margin-top:8px; }
+  .cta-band .btn-ghost{ border-color:rgba(255,255,255,0.3); color:#fff; }
+
+  footer{ padding:56px 0 32px; }
+  .footer-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px; margin-bottom:48px; }
+  .footer-grid h5{ font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:16px; }
+  .footer-grid ul{ list-style:none; }
+  .footer-grid li{ margin-bottom:10px; font-size:14.5px; }
+  .footer-grid a:hover{ color:var(--brand); }
+  .footer-bottom{ display:flex; justify-content:space-between; padding-top:28px; border-top:1px solid var(--line); font-size:13px; color:var(--muted); flex-wrap:wrap; gap:12px; }
+  .socials{ display:flex; gap:14px; }
+  .socials a{ width:30px; height:30px; border-radius:50%; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:12px; transition:border-color .15s ease, transform .15s ease; }
+  .socials a:hover{ border-color:var(--ink); transform:translateY(-2px); }
+
+  .ela-cursor-dot, .ela-cursor-ring{ position:fixed; top:0; left:0; pointer-events:none; z-index:999; border-radius:50%; transform:translate(-100px,-100px); }
+  .ela-cursor-dot{ width:6px; height:6px; background:var(--ink); margin:-3px 0 0 -3px; }
+  .ela-cursor-ring{ width:34px; height:34px; margin:-17px 0 0 -17px; border:1px solid var(--ink); transition:width .25s ease, height .25s ease, margin .25s ease, border-color .25s ease, background .25s ease; display:flex; align-items:center; justify-content:center; }
+  .ela-cursor-ring.hover{ width:56px; height:56px; margin:-28px 0 0 -28px; background:var(--ink); }
+  .ela-cursor-ring.down{ width:26px; height:26px; margin:-13px 0 0 -13px; }
+  .ela-cursor-label{ font-family:var(--display); font-size:11px; font-weight:600; color:#fff; opacity:0; transition:opacity .2s ease; text-transform:uppercase; letter-spacing:0.04em; }
+  .ela-cursor-ring.has-label .ela-cursor-label{ opacity:1; }
+  @media (pointer: coarse){ .ela-cursor-dot, .ela-cursor-ring{ display:none; } }
+  html.ela-cursor-active, html.ela-cursor-active *{ cursor:none !important; }
+
+  @media (max-width:720px){
+    nav ul{ display:none; }
+    .wrap{ padding:0 20px; }
+    .office-cards{ grid-template-columns:1fr; }
+    .cta-band .wrap{ flex-direction:column; align-items:flex-start; }
+    .footer-grid{ grid-template-columns:1fr 1fr; }
+  }
+  @media (max-width:520px){ .nav-actions{ gap:8px; } .nav-actions .btn{ white-space:nowrap; padding:10px 13px; font-size:13px; } }
+  .btn .short{ display:none; }
+  @media (max-width:980px){ .nav-actions .long{ display:none; } .nav-actions .short{ display:inline; } }
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="wrap nav">
+    <a href="index.html" class="logo"><img src="ela-logo-mark.png" alt="ELA - Enviable Logistics"></a>
+    <nav><ul>
+      <li><a href="about.html">About</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="team.html">Team</a></li>
+      <li><a href="careers.html">Careers</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul></nav>
+    <div class="nav-actions">
+      <a href="index.html#contact" class="btn btn-ghost"><span class="long">Business partner account</span><span class="short">Partner account</span></a>
+      <a href="index.html#app" class="btn btn-primary">Download app</a>
+    </div>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow reveal">Our network</p>
+    <h1 class="reveal">Wherever you are, we're close by.</h1>
+    <p class="reveal">Offices, passenger terminals, corridor checkpoints, and EV charging stations across Nigeria — find the ELA location nearest you.</p>
+  </div>
+</section>
+
+<nav class="state-nav" aria-label="Browse network">
+  <div class="wrap">
+    <a href="#net-offices" class="net-jump active" data-net="offices">Offices</a>
+    <a href="#net-terminals" class="net-jump" data-net="terminals">Passenger terminals</a>
+    <a href="#net-checkpoints" class="net-jump" data-net="checkpoints">Checkpoints</a>
+    <a href="#net-charging" class="net-jump" data-net="charging">Charging stations</a>
+  </div>
+</nav>
+
+<section class="offices-section">
+  <div class="wrap">
+
+    <div class="office-group net-panel" id="net-offices">
+      <p class="office-group-title reveal">Offices (27)</p>
+      <div class="office-cards">
+      <div class="office-card reveal"><p class="oc-label">Lagos, Head Office</p><p class="oc-addr">No. 52 Saka Tinubu, Victoria Island, Lagos.</p><div class="oc-phones"><a href="tel:08038802353">08038802353</a><a href="tel:08088391723">08088391723</a></div></div>
+      <div class="office-card reveal"><p class="oc-label">Lagos, Ikorodu</p><p class="oc-addr">No. 54 Ikorodu-Shagamu Rd, opp. NIPCO, Sabo, Ikorodu.</p><div class="oc-phones"><a href="tel:07049830713">07049830713</a><a href="tel:08084794234">08084794234</a></div></div>
+      <div class="office-card reveal"><p class="oc-label">Lagos, Ijesha</p><p class="oc-addr">Plot 40 Alakoso Avenue, Ijesha junction.</p><div class="oc-phones"><a href="tel:09160006845">09160006845</a></div></div>
+      <div class="office-card reveal"><p class="oc-label">Lagos, Lekki</p><p class="oc-addr">No. 66 Jolayemi St, The Roost Estate, Admiralty Way, Lekki.</p><div class="oc-phones"><a href="tel:09165025854">09165025854</a></div></div>
+      <div class="office-card reveal"><p class="oc-label">Abuja, Jabi</p><p class="oc-addr">No. 6 Ebitu Ukiwe St, Jabi (Grand Cubana).</p><div class="oc-phones"><a href="tel:09067808762">09067808762</a></div></div>
+      <div class="office-card reveal"><p class="oc-label">Abuja, Gwarimpa</p><p class="oc-addr">Plot 453E Wole Soyinka Ave, 2nd Ave, Gwarimpa.</p><div class="oc-phones"><a href="tel:07026313643">07026313643</a></div></div>
+      <div class="office-card reveal"><p class="oc-label">Warri (Delta)</p><p class="oc-addr">38 Udu Road, former Eco Bank, Warri.</p><div class="oc-phones"><a href="tel:09122729970">09122729970</a></div></div>
+      <div class="office-card reveal"><p class="oc-label">Asaba</p><p class="oc-addr">ULO Glass House by NTA Rd, Okpanam Rd.</p><div class="oc-phones"><a href="tel:09013603815">09013603815</a><a href="tel:09135697671">09135697671</a></div></div>
+      <div class="office-card reveal"><p class="oc-label">Abakaliki (Ebonyi)</p><p class="oc-addr">10 Enugu Expressway, Ezzamgbo Jct, opp. Fly Over.</p><div class="oc-phones"><a href="tel:08086426153">08086426153</a></div></div>
+      <div class="office-card reveal"><p class="oc-label">Uyo</p><p class="oc-addr">Jedellh Plaza, Km 7A Abak Road, Uyo.</p><div class="oc-phones"><a href="tel:08138340694">08138340694</a><a href="tel:09067481541">09067481541</a></div></div>
+      <div class="office-card reveal"><p class="oc-label">Awka</p><p class="oc-addr">No. 49 Ziks Avenue, Awawbia, Awka South.</p><div class="oc-phones"><a href="tel:07085910515">07085910515</a><a href="tel:07039940913">07039940913</a></div></div>
+      <div class="office-card reveal"><p class="oc-label">Yenagoa (Bayelsa)</p><p class="oc-addr">No. 10 Azikoro Road, by Ekeki Junction.</p><div class="oc-phones"><a href="tel:07048497538">07048497538</a></div></div>
+      <div class="office-card reveal"><p class="oc-label">Owerri</p><p class="oc-addr">105/106 Onitsha Road Layout, by Focal’s Eagle Filling Stn.</p><div class="oc-phones"><a href="tel:09136007089">09136007089</a></div></div>
+      <div class="office-card reveal"><p class="oc-label">Umuahia</p><p class="oc-addr">Plots 12/14/15 Eghem Layout Ph II, Jovit Jct, BCA Road.</p><div class="oc-phones"><a href="tel:08133629929">08133629929</a></div></div>
+      <div class="office-card reveal"><p class="oc-label">Aba</p><p class="oc-addr">Jovit Mall, No. 46 Eziama, Aba-Owerri Rd, Aba North Jct.</p><div class="oc-phones"><a href="tel:07044834134">07044834134</a></div></div>
+      <div class="office-card reveal"><p class="oc-label">Port Harcourt, GRA</p><p class="oc-addr">No. 19 Obagi Street, GRA Phase 1.</p><div class="oc-phones"><a href="tel:08134167609">08134167609</a></div></div>
+      <div class="office-card reveal"><p class="oc-label">Port Harcourt, Trans Amadi</p><p class="oc-addr">Dreamland Plaza, Peter Odili Rd, Trans Amadi.</p><div class="oc-phones"><a href="tel:07019846106">07019846106</a></div></div>
+      <div class="office-card reveal"><p class="oc-label">Enugu</p><p class="oc-addr">No. 166 Agbani Road, beside Igbariam bus stop.</p><div class="oc-phones"><a href="tel:08144234732">08144234732</a></div></div>
+      <div class="office-card reveal"><p class="oc-label">Benin</p><p class="oc-addr">90 Country Home Rd, by Fega Supermarket, off Sapele Rd.</p><div class="oc-phones"><a href="tel:08107683754">08107683754</a><a href="tel:08074206727">08074206727</a></div></div>
+      <div class="office-card reveal"><p class="oc-label">Nasarawa</p><p class="oc-addr">City Mart Plaza, beside Rock City Hotel, Mararaba.</p><div class="oc-phones"><a href="tel:09035202556">09035202556</a></div></div>
+      <div class="office-card reveal"><p class="oc-label">Kaduna</p><p class="oc-addr">H19, Keffi Road by Ahmadu Bello Way.</p><div class="oc-phones"><a href="tel:07048216436">07048216436</a></div></div>
+      <div class="office-card reveal"><p class="oc-label">Kano</p><p class="oc-addr">58 Niger Road, Sabon Gari, Kano.</p><div class="oc-phones"><a href="tel:09168533459">09168533459</a></div></div>
+      <div class="office-card reveal"><p class="oc-label">Gombe</p><p class="oc-addr">Adamu Fura House, Gombe State.</p><div class="oc-phones"><a href="tel:08140096185">08140096185</a></div></div>
+      <div class="office-card reveal"><p class="oc-label">Bauchi</p><p class="oc-addr">Sir Abubakar Tafawa Balewa House, Ram Road, Bauchi.</p><div class="oc-phones"><a href="tel:07077818900">07077818900</a></div></div>
+      <div class="office-card reveal"><p class="oc-label">Ibadan</p><p class="oc-addr">101 Iwo Road, Ibadan.</p><div class="oc-phones"><a href="tel:08103410835">08103410835</a></div></div>
+      <div class="office-card reveal"><p class="oc-label">Sokoto</p><p class="oc-addr">11 Bypass, opp. Green Ville, by Uduth Bypass Gate.</p><div class="oc-phones"><a href="tel:08149293393">08149293393</a></div></div>
+      <div class="office-card reveal"><p class="oc-label">Jos</p><p class="oc-addr">Tafawa Balewa Road, west of Minds Junction, Jos.</p><p class="oc-nophone">Phone number to follow</p></div>
+      </div>
+    </div>
+
+    <div class="office-group net-panel" id="net-terminals" style="display:none;">
+      <p class="office-group-title reveal">Passenger terminals (17)</p>
+      <div class="office-cards">
+      <div class="office-card reveal"><p class="oc-label">Lagos</p><p class="oc-addr">Jibowu and Ajah axis</p></div>
+      <div class="office-card reveal"><p class="oc-label">Ibadan</p><p class="oc-addr">Samonda - Sango Rd / Old Airport & Iwo Road axis</p></div>
+      <div class="office-card reveal"><p class="oc-label">Ore</p><p class="oc-addr">Ore Junction / Benin-Sagamu Expressway</p></div>
+      <div class="office-card reveal"><p class="oc-label">Ondo</p><p class="oc-addr">NNPC Filling Stn, Lagos-Benin Express, before overhead bridge, Ore</p></div>
+      <div class="office-card reveal"><p class="oc-label">Benin</p><p class="oc-addr">Benin Tollgate Oluku / Uselu-Ugbowo axis</p></div>
+      <div class="office-card reveal"><p class="oc-label">Asaba</p><p class="oc-addr">Asaba-Onitsha Expressway axis</p></div>
+      <div class="office-card reveal"><p class="oc-label">Warri</p><p class="oc-addr">Enerhen / Effurun-Sapele Road axis</p></div>
+      <div class="office-card reveal"><p class="oc-label">Kaduna</p><p class="oc-addr">Kawo / Zaria Road corridor</p></div>
+      <div class="office-card reveal"><p class="oc-label">Kano</p><p class="oc-addr">Yankaba / Kano-Zaria corridor</p></div>
+      <div class="office-card reveal"><p class="oc-label">Abuja</p><p class="oc-addr">Jabi/Utako Motor Park, Zuba or Gwagwalada</p></div>
+      <div class="office-card reveal"><p class="oc-label">Port Harcourt</p><p class="oc-addr">Mile 1 / Oil Mill Road, Eleme Junction</p></div>
+      <div class="office-card reveal"><p class="oc-label">Aba</p><p class="oc-addr">Aba-Owerri Road / Osisioma axis</p></div>
+      <div class="office-card reveal"><p class="oc-label">Ekiti</p><p class="oc-addr">Ijoka Road / Old Garage corridor</p></div>
+      <div class="office-card reveal"><p class="oc-label">Benue</p><p class="oc-addr">KM 1 Aliade-Otukpo Rd, Aliade Trailer Park</p></div>
+      <div class="office-card reveal"><p class="oc-label">Lokoja</p><p class="oc-addr">Lokoja Toll Gate, Crusher Junction, Kogi</p></div>
+      <div class="office-card reveal"><p class="oc-label">Mokwa</p><p class="oc-addr">Ashafa Filling Station, Mokwa Road</p></div>
+      <div class="office-card reveal"><p class="oc-label">Sagamu / Ijebu Ode</p><p class="oc-addr">Sagamu-Benin Expressway / Flyover axis</p></div>
+      </div>
+    </div>
+
+    <div class="office-group net-panel" id="net-checkpoints" style="display:none;">
+      <p class="office-group-title reveal">Corridor checkpoints (7)</p>
+      <p class="reveal" style="color:var(--muted); font-size:14.5px; max-width:640px; margin-bottom:28px;">ELA operates corridor checkpoints along Nigeria's busiest freight and passenger routes — vehicles are logged, inspected and cleared at each one, so every trip stays accounted for.</p>
+      <div class="office-cards">
+      <div class="office-card reveal"><p class="oc-label">Lagos-Ibadan Corridor</p><p class="oc-addr">Expressway control & logging point</p></div>
+      <div class="office-card reveal"><p class="oc-label">Ibadan-Benin Corridor</p><p class="oc-addr">Mid-route control point</p></div>
+      <div class="office-card reveal"><p class="oc-label">Benin-Asaba / Onitsha Corridor</p><p class="oc-addr">South-South control point</p></div>
+      <div class="office-card reveal"><p class="oc-label">Abuja-Kaduna Corridor</p><p class="oc-addr">North-Central control point</p></div>
+      <div class="office-card reveal"><p class="oc-label">Kaduna-Kano Corridor</p><p class="oc-addr">Northern control point</p></div>
+      <div class="office-card reveal"><p class="oc-label">Enugu-Port Harcourt Corridor</p><p class="oc-addr">South-East control point</p></div>
+      <div class="office-card reveal"><p class="oc-label">Onitsha-Owerri-Aba Corridor</p><p class="oc-addr">South-East distribution control point</p></div>
+      </div>
+    </div>
+
+    <div class="office-group net-panel" id="net-charging" style="display:none;">
+      <p class="office-group-title reveal">Charging &amp; battery-swap stations (6)</p>
+      <p class="reveal" style="color:var(--muted); font-size:14.5px; max-width:640px; margin-bottom:28px;">These stations keep our electric last-mile bikes moving all day — riders swap a drained battery for a charged one in minutes and get straight back on the road.</p>
+      <div class="office-cards">
+      <div class="office-card reveal"><p class="oc-label">Lagos</p><p class="oc-addr">Charging & battery-swap hub</p></div>
+      <div class="office-card reveal"><p class="oc-label">Abuja</p><p class="oc-addr">Charging & battery-swap hub</p></div>
+      <div class="office-card reveal"><p class="oc-label">Port Harcourt</p><p class="oc-addr">Charging & battery-swap hub</p></div>
+      <div class="office-card reveal"><p class="oc-label">Ibadan</p><p class="oc-addr">Charging & battery-swap hub</p></div>
+      <div class="office-card reveal"><p class="oc-label">Benin</p><p class="oc-addr">Charging & battery-swap hub</p></div>
+      <div class="office-card reveal"><p class="oc-label">Enugu</p><p class="oc-addr">Charging & battery-swap hub</p></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="cta-band">
+  <div class="wrap">
+    <div>
+      <h2>Ready to travel or ship with ELA?</h2>
+      <p>Book a seat, a ride or a delivery, or talk to your nearest branch.</p>
+    </div>
+    <a href="book.html" class="btn btn-ghost">Book now →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <a href="index.html" class="logo" style="margin-bottom:14px;"><img src="ela-logo-mark.png" alt="ELA - Enviable Logistics" style="height:28px;"></a>
+        <p style="color:var(--muted); font-size:14px; max-width:260px;">Enviable Logistics Ltd — moving Lagos, Nigeria, and beyond, one tracked route at a time.</p>
+      </div>
+      <div><h5>Company</h5><ul><li><a href="about.html">About us</a></li><li><a href="services.html">Services</a></li><li><a href="team.html">Team</a></li><li><a href="careers.html">Careers</a></li><li><a href="index.html#contact">Contact us</a></li></ul></div>
+      <div><h5>Help &amp; support</h5><ul><li><a href="offices.html">Our offices</a></li><li><a href="book.html?tab=track">Track a shipment</a></li><li><a href="book.html?tab=manage">Manage booking</a></li><li><a href="tel:08038802353">Call us</a></li><li><a href="index.html#contact">Email us</a></li></ul></div>
+      <div>
+        <h5>Follow</h5>
+        <div class="socials">
+          <a href="#" aria-label="X">X</a>
+          <a href="https://www.instagram.com/enviablelogistics/" aria-label="Instagram">IG</a>
+          <a href="#" aria-label="Facebook">FB</a>
+          <a href="#" aria-label="YouTube">YT</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Enviable Logistics Ltd.</span>
+      <span style="display:flex; gap:18px;"><a href="#">Terms of Service</a><a href="#">Privacy &amp; Policy</a><a href="#">Account deletion</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---- network category tabs: Offices / Terminals / Checkpoints / Charging ----
+  document.querySelectorAll('.net-jump').forEach(link=>{
+    link.addEventListener('click', (e)=>{
+      e.preventDefault();
+      const target = link.dataset.net;
+      document.querySelectorAll('.net-jump').forEach(l=> l.classList.toggle('active', l === link));
+      document.querySelectorAll('.net-panel').forEach(panel=>{
+        const show = panel.id === 'net-' + target;
+        panel.style.display = show ? '' : 'none';
+        if(show && typeof gsap !== 'undefined' && !reduceMotion){
+          gsap.fromTo(panel.querySelectorAll('.office-card'), {opacity:0, y:14}, {opacity:1, y:0, duration:.4, stagger:.03, ease:'power2.out'});
+        }
+      });
+    });
+  });
+
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', ()=>{
+    header.classList.toggle('scrolled', window.scrollY > 8);
+  }, {passive:true});
+
+  function showEverything(){
+    document.querySelectorAll('.reveal').forEach(el=> el.style.opacity = 1);
+  }
+
+  if(typeof gsap === 'undefined'){
+    showEverything();
+  } else if(reduceMotion){
+    gsap.set('.reveal', {opacity:1});
+  } else {
+    try {
+      gsap.registerPlugin(ScrollTrigger);
+
+      gsap.timeline({defaults:{ease:'power3.out'}})
+        .from('.page-hero .eyebrow', {opacity:0, y:12, duration:.5})
+        .from('.page-hero h1', {opacity:0, y:24, duration:.6}, '-=.3')
+        .from('.page-hero p:not(.eyebrow)', {opacity:0, y:14, duration:.5}, '-=.35');
+
+      // only the first (visible) panel animates in on load — the rest animate when their tab is clicked
+      const firstPanel = document.querySelector('.net-panel');
+      if(firstPanel){
+        gsap.from(firstPanel.querySelector('.office-group-title'), {opacity:0, y:14, duration:.5, scrollTrigger:{trigger:firstPanel, start:'top 85%'}});
+        gsap.from(firstPanel.querySelectorAll('.office-card'), {
+          opacity:0, y:22, duration:.55, stagger:.04, ease:'power3.out',
+          scrollTrigger:{trigger:firstPanel, start:'top 85%'}
+        });
+      }
+
+      gsap.from('.cta-band .wrap > *', {
+        opacity:0, y:20, duration:.6, stagger:.1,
+        scrollTrigger:{trigger:'.cta-band', start:'top 85%'}
+      });
+
+    } catch(err){
+      console.error('ELA animation error — falling back to static visible content:', err);
+      showEverything();
+    }
+  }
+</script>
+<script src="site.js"></script>
+
+</body>
+</html>

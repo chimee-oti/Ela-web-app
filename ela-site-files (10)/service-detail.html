@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pagetitle">Service — ELA | Enviable Logistics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --brand:#16305E;
+    --ink:#14161A;
+    --paper:#FFFFFF;
+    --line:#E7E8EB;
+    --muted:#6B7078;
+    --display:'Space Grotesk', sans-serif;
+    --body:'Inter', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{ font-family:var(--body); color:var(--ink); background:var(--paper); line-height:1.55; -webkit-font-smoothing:antialiased; }
+  img{max-width:100%; display:block;}
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 32px;}
+  h1,h2,h3{ font-family:var(--display); font-weight:600; letter-spacing:-0.01em; }
+  .eyebrow{ font-size:13px; font-weight:600; color:var(--brand); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:14px; }
+
+  .btn{ display:inline-flex; align-items:center; gap:8px; padding:13px 26px; border-radius:6px; font-weight:600; font-size:14.5px; border:1px solid transparent; cursor:pointer; transition:filter .15s ease, border-color .15s ease; }
+  .btn-primary{ background:var(--brand); color:#fff; }
+  .btn-primary:hover{ filter:brightness(1.22); }
+  .btn-ghost{ background:transparent; color:var(--ink); border-color:var(--line); }
+  .btn-ghost:hover{ border-color:var(--ink); }
+
+  header{ position:sticky; top:0; z-index:50; background:rgba(255,255,255,0.92); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); transition:box-shadow .25s ease; }
+  header.scrolled{ box-shadow:0 6px 20px -12px rgba(20,22,26,0.15); }
+  .nav{ display:flex; align-items:center; justify-content:space-between; height:72px; }
+  .logo{ display:inline-flex; align-items:center; }
+  .logo img{ height:26px; width:auto; display:block; }
+  nav ul{ display:flex; gap:34px; list-style:none; }
+  nav ul a{ font-size:14.5px; color:var(--muted); position:relative; padding-bottom:3px; }
+  nav ul a.active{ color:var(--ink); }
+  nav ul a::after{ content:""; position:absolute; left:0; bottom:0; width:0; height:1.5px; background:var(--brand); transition:width .2s ease; }
+  nav ul a:hover{ color:var(--ink); }
+  nav ul a:hover::after, nav ul a.active::after{ width:100%; }
+  .nav-actions{ display:flex; align-items:center; gap:12px; }
+
+  .back-row{ padding:20px 0; border-bottom:1px solid var(--line); }
+  .back-link{ display:inline-flex; align-items:center; gap:8px; font-size:13.5px; color:var(--muted); font-weight:600; }
+  .back-link:hover{ color:var(--ink); }
+
+  /* hero */
+  .detail-hero{ position:relative; height:72vh; min-height:540px; max-height:700px; overflow:hidden; }
+  .detail-hero img{ width:100%; height:124%; object-fit:cover; position:relative; top:-12%; }
+  .detail-hero .overlay{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(20,22,26,0.15) 0%, rgba(20,22,26,0.85) 100%); }
+  .detail-hero .content{ position:absolute; left:0; right:0; bottom:0; padding:48px 0; color:#fff; }
+  .detail-hero .product-tag{ font-family:var(--display); font-size:12px; font-weight:600; color:#fff; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.35); border-radius:999px; padding:5px 13px; display:inline-block; margin-bottom:16px; backdrop-filter:blur(4px); }
+  .detail-hero h1{ font-size:clamp(32px,4.6vw,54px); line-height:1.05; color:#fff; max-width:760px; }
+  .detail-hero .dh-sub{ font-size:clamp(16px,1.6vw,19px); color:rgba(255,255,255,0.82); max-width:620px; margin-top:16px; }
+  .dh-ctas{ display:flex; flex-wrap:wrap; gap:12px; margin-top:28px; }
+  .btn-light{ background:#fff; color:var(--ink); }
+  .btn-light:hover{ filter:brightness(0.94); transform:translateY(-1px); }
+  .btn-outline-light{ background:rgba(255,255,255,0.08); color:#fff; border-color:rgba(255,255,255,0.45); backdrop-filter:blur(4px); }
+  .btn-outline-light:hover{ background:rgba(255,255,255,0.18); border-color:#fff; transform:translateY(-1px); }
+
+  /* body */
+  .detail-body{ padding:64px 0; }
+  .detail-grid{ display:grid; grid-template-columns:1fr 320px; gap:64px; }
+  .detail-main p.lede{ font-size:18px; color:var(--ink); margin-bottom:24px; max-width:640px; }
+  .detail-main p{ color:var(--muted); font-size:15.5px; margin-bottom:18px; max-width:640px; }
+  .detail-main h2{ font-size:22px; margin:36px 0 16px; }
+  .detail-main ul{ list-style:none; display:grid; grid-template-columns:1fr 1fr; gap:10px 16px; margin-bottom:8px; }
+  .detail-main ul li{ font-size:14.5px; color:var(--ink); padding-left:18px; position:relative; }
+  .detail-main ul li::before{ content:""; position:absolute; left:0; top:9px; width:8px; height:1.5px; background:var(--brand); }
+
+  .side-card{ border:1px solid var(--line); border-radius:12px; padding:24px; margin-bottom:20px; }
+  .side-card h4{ font-family:var(--display); font-size:13px; text-transform:uppercase; letter-spacing:0.05em; color:var(--muted); margin-bottom:16px; }
+  .side-stat{ display:flex; justify-content:space-between; align-items:baseline; padding:10px 0; border-top:1px solid var(--line); }
+  .side-stat:first-of-type{ border-top:none; }
+  .side-stat .v{ font-family:var(--display); font-weight:600; font-size:16px; }
+  .side-stat .l{ font-size:13px; color:var(--muted); }
+  .side-card .btn{ width:100%; justify-content:center; margin-top:4px; }
+
+  /* ---- detailed explanation sections ---- */
+  .eyebrow{ font-size:13px; font-weight:600; color:var(--brand); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:12px; }
+  .detail-side{ position:sticky; top:96px; align-self:start; }
+  .detail-side > .btn{ width:100%; justify-content:center; margin-top:10px; }
+  .detail-side > .btn:first-of-type{ margin-top:0; }
+  .dm-h{ font-size:24px; margin:56px 0 18px; }
+  .detail-main .lede + p, .detail-main > p{ max-width:660px; }
+
+  .book-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .book-card{ border:1px solid var(--line); border-radius:16px; padding:22px 22px 24px; background:#fff; transition:transform .35s cubic-bezier(.22,1,.36,1), border-color .3s ease, background .3s ease; }
+  .book-card:hover{ transform:translateY(-5px); border-color:var(--brand); background:#FAFBFC; }
+  .book-card:last-child:nth-child(odd){ grid-column:span 2; }
+  .bc-check{ width:30px; height:30px; border-radius:50%; background:#EEF3FB; display:flex; align-items:center; justify-content:center; margin-bottom:14px; transition:background .3s ease; }
+  .bc-check svg{ width:15px; height:15px; stroke:var(--brand); transition:stroke .3s ease; }
+  .book-card:hover .bc-check{ background:var(--brand); }
+  .book-card:hover .bc-check svg{ stroke:#fff; }
+  .book-card h3{ font-size:16.5px; margin-bottom:6px; }
+  .detail-main .book-card p{ font-size:13.8px; margin:0; max-width:none; line-height:1.5; }
+
+  .addon-card{ display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; background:#EEF3FB; border-radius:16px; padding:22px 26px; margin-top:16px; }
+  .addon-card h3{ font-size:17px; margin-bottom:4px; }
+  .detail-main .addon-card p{ margin:0; font-size:14px; max-width:460px; }
+
+  .steps{ list-style:none; margin-top:6px; }
+  .steps li{ position:relative; display:flex; gap:18px; padding-bottom:30px; }
+  .steps li:last-child{ padding-bottom:0; }
+  .steps li:not(:last-child)::before{ content:""; position:absolute; left:16px; top:36px; bottom:2px; width:2px; background:var(--line); transition:background .6s ease; }
+  .steps li.on:not(:last-child)::before{ background:var(--brand); }
+  .sn{ width:34px; height:34px; border-radius:50%; border:1.5px solid var(--line); color:var(--muted); display:flex; align-items:center; justify-content:center; font-family:var(--display); font-weight:600; font-size:14px; background:#fff; flex-shrink:0; position:relative; z-index:2; transition:background .4s ease, color .4s ease, border-color .4s ease; }
+  .steps li.on .sn{ background:var(--brand); border-color:var(--brand); color:#fff; }
+  .steps h4{ font-family:var(--display); font-size:16.5px; font-weight:600; margin:4px 0 4px; }
+  .detail-main .steps p{ margin:0; font-size:14.5px; max-width:520px; }
+
+  .chips{ display:flex; flex-wrap:wrap; gap:10px; }
+  .chips span{ border:1px solid var(--line); border-radius:999px; padding:8px 16px; font-size:13.5px; font-weight:500; background:#F7F9FC; transition:border-color .25s ease, background .25s ease; }
+  .chips span:hover{ border-color:var(--brand); background:#EEF3FB; }
+
+  .foms-band{ background:var(--ink); color:#fff; padding:88px 0; }
+  .foms-band .eyebrow{ color:#9DB4E4; }
+  .foms-band h2{ font-size:clamp(26px,3vw,36px); color:#fff; margin-bottom:14px; }
+  .foms-head p{ color:rgba(255,255,255,0.7); max-width:660px; font-size:16px; }
+  .foms-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:20px; margin-top:44px; }
+  .foms-item{ border:1px solid rgba(255,255,255,0.14); border-radius:16px; padding:24px 22px; transition:border-color .3s ease, background .3s ease, transform .35s cubic-bezier(.22,1,.36,1); }
+  .foms-item:hover{ border-color:rgba(255,255,255,0.4); background:rgba(255,255,255,0.04); transform:translateY(-5px); }
+  .foms-item .fi{ width:36px; height:36px; border-radius:10px; background:rgba(157,180,228,0.16); display:flex; align-items:center; justify-content:center; margin-bottom:16px; }
+  .foms-item .fi svg{ width:18px; height:18px; stroke:#9DB4E4; }
+  .foms-item h3{ font-size:16px; color:#fff; margin-bottom:6px; }
+  .foms-item p{ font-size:13.5px; color:rgba(255,255,255,0.66); line-height:1.5; }
+
+  .why-band{ padding:88px 0; background:#F7F9FC; border-bottom:1px solid var(--line); }
+  .why-band h2, .unit-team h2{ font-size:clamp(24px,2.8vw,34px); margin-bottom:40px; max-width:620px; }
+  .why-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .why-card{ background:#fff; border:1px solid var(--line); border-radius:18px; padding:30px 26px; position:relative; overflow:hidden; transition:transform .4s cubic-bezier(.22,1,.36,1), border-color .3s ease; }
+  .why-card:hover{ transform:translateY(-6px); border-color:var(--brand); }
+  .why-card .wn{ position:absolute; right:20px; top:8px; font-family:var(--display); font-size:58px; font-weight:700; color:rgba(22,48,94,0.07); line-height:1; }
+  .why-card h3{ font-size:18px; margin-bottom:10px; position:relative; }
+  .why-card p{ font-size:14.5px; color:var(--muted); position:relative; }
+
+  .unit-team{ padding:88px 0; border-bottom:1px solid var(--line); }
+  .ut-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .ut-card{ display:flex; align-items:center; gap:14px; border:1px solid var(--line); border-radius:14px; padding:16px 18px; transition:border-color .3s ease, transform .35s cubic-bezier(.22,1,.36,1); }
+  .ut-card:hover{ border-color:var(--brand); transform:translateY(-4px); }
+  .ut-av{ width:42px; height:42px; border-radius:50%; background:var(--ink); color:#fff; display:flex; align-items:center; justify-content:center; font-family:var(--display); font-weight:600; font-size:14px; flex-shrink:0; }
+  .ut-card b{ display:block; font-size:14.5px; font-weight:600; }
+  .ut-card i{ font-style:normal; font-size:12.5px; color:var(--muted); }
+
+  .faq-band{ padding:88px 0; }
+  .faq-wrap{ display:grid; grid-template-columns:0.8fr 1.2fr; gap:56px; align-items:start; }
+  .faq-side h2{ font-size:clamp(24px,2.8vw,34px); margin-bottom:14px; }
+  .faq-side p.sub{ color:var(--muted); font-size:15px; max-width:340px; margin-bottom:22px; }
+  .faq-item{ border-top:1px solid var(--line); }
+  .faq-item:last-child{ border-bottom:1px solid var(--line); }
+  .faq-q{ appearance:none; background:none; border:0; font:inherit; color:inherit; text-align:left; cursor:pointer; width:100%; display:flex; justify-content:space-between; align-items:center; gap:20px; padding:22px 0; font-family:var(--display); font-size:17px; font-weight:600; }
+  .faq-q .pm{ position:relative; width:14px; height:14px; flex-shrink:0; }
+  .faq-q .pm::before, .faq-q .pm::after{ content:""; position:absolute; background:var(--brand); border-radius:2px; transition:transform .3s ease; }
+  .faq-q .pm::before{ left:0; right:0; top:6px; height:2px; }
+  .faq-q .pm::after{ top:0; bottom:0; left:6px; width:2px; }
+  .faq-item.open .pm::after{ transform:scaleY(0); }
+  .faq-a{ display:grid; grid-template-rows:0fr; transition:grid-template-rows .35s ease; }
+  .faq-item.open .faq-a{ grid-template-rows:1fr; }
+  .faq-a > div{ overflow:hidden; }
+  .faq-a p{ color:var(--muted); font-size:15px; padding:0 40px 22px 0; max-width:560px; }
+
+  @media (max-width:980px){
+    .foms-grid{ grid-template-columns:1fr 1fr; }
+    .why-grid{ grid-template-columns:1fr; }
+    .ut-grid{ grid-template-columns:1fr 1fr; }
+    .faq-wrap{ grid-template-columns:1fr; gap:28px; }
+    .detail-side{ position:static; }
+  }
+  @media (max-width:640px){
+    .book-grid{ grid-template-columns:1fr; }
+    .book-card:last-child:nth-child(odd){ grid-column:span 1; }
+    .foms-grid, .ut-grid{ grid-template-columns:1fr; }
+    .detail-hero{ min-height:600px; }
+    .dh-ctas .btn{ flex:1 1 100%; justify-content:center; }
+  }
+  @media (prefers-reduced-motion: reduce){ .faq-a{ transition:none; } }
+
+  /* related */
+  .related{ padding:64px 0 96px; border-top:1px solid var(--line); }
+  .related h3{ font-size:20px; margin-bottom:28px; }
+  .related-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+  .rel-card{ position:relative; border-radius:12px; overflow:hidden; aspect-ratio:4/5; display:block; background:var(--ink); }
+  .rel-card img{ width:100%; height:124%; object-fit:cover; position:absolute; top:-12%; left:0; transition:transform .5s ease; }
+  .rel-card:hover img{ transform:scale(1.06); }
+  .rel-card .overlay{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(20,22,26,0) 45%, rgba(20,22,26,0.85) 100%); }
+  .rel-card .rc-content{ position:absolute; left:0; right:0; bottom:0; padding:18px; color:#fff; }
+  .rel-card h4{ font-family:var(--display); font-size:16px; font-weight:600; }
+
+  .cta-band{ background:var(--ink); color:#fff; padding:64px 0; }
+  .cta-band .wrap{ display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap; }
+  .cta-band h2{ font-size:clamp(24px,2.8vw,32px); color:#fff; }
+  .cta-band p{ color:rgba(255,255,255,0.65); margin-top:8px; }
+  .cta-band .btn-ghost{ border-color:rgba(255,255,255,0.3); color:#fff; }
+
+  footer{ padding:56px 0 32px; }
+  .footer-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px; margin-bottom:48px; }
+  .footer-grid h5{ font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:16px; }
+  .footer-grid ul{ list-style:none; }
+  .footer-grid li{ margin-bottom:10px; font-size:14.5px; }
+  .footer-grid a:hover{ color:var(--brand); }
+  .footer-bottom{ display:flex; justify-content:space-between; padding-top:28px; border-top:1px solid var(--line); font-size:13px; color:var(--muted); flex-wrap:wrap; gap:12px; }
+  .socials{ display:flex; gap:14px; }
+  .socials a{ width:30px; height:30px; border-radius:50%; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:12px; transition:border-color .15s ease, transform .15s ease; }
+  .socials a:hover{ border-color:var(--ink); transform:translateY(-2px); }
+
+  /* .reveal starts visible by default; JS hides+animates it only once GSAP
+     successfully initializes, so content is never stuck invisible if a
+     script/CDN fails. See the try/catch guard in the script below. */
+
+  .ela-cursor-dot, .ela-cursor-ring{ position:fixed; top:0; left:0; pointer-events:none; z-index:999; border-radius:50%; transform:translate(-100px,-100px); }
+  .ela-cursor-dot{ width:6px; height:6px; background:var(--ink); margin:-3px 0 0 -3px; }
+  .ela-cursor-ring{ width:34px; height:34px; margin:-17px 0 0 -17px; border:1px solid var(--ink); transition:width .25s ease, height .25s ease, margin .25s ease, border-color .25s ease, background .25s ease; display:flex; align-items:center; justify-content:center; }
+  .ela-cursor-ring.hover{ width:56px; height:56px; margin:-28px 0 0 -28px; background:var(--ink); }
+  .ela-cursor-ring.down{ width:26px; height:26px; margin:-13px 0 0 -13px; }
+  .ela-cursor-label{ font-family:var(--display); font-size:11px; font-weight:600; color:#fff; opacity:0; transition:opacity .2s ease; text-transform:uppercase; letter-spacing:0.04em; }
+  .ela-cursor-ring.has-label .ela-cursor-label{ opacity:1; }
+  @media (pointer: coarse){ .ela-cursor-dot, .ela-cursor-ring{ display:none; } }
+  html.ela-cursor-active, html.ela-cursor-active *{ cursor:none !important; }
+
+  @media (max-width:900px){
+    .detail-grid{ grid-template-columns:1fr; }
+    .detail-main ul{ grid-template-columns:1fr; }
+    .related-grid{ grid-template-columns:1fr 1fr; }
+    .cta-band .wrap{ flex-direction:column; align-items:flex-start; }
+  }
+  @media (max-width:600px){
+    nav ul{ display:none; }
+    .wrap{ padding:0 20px; }
+    .related-grid{ grid-template-columns:1fr; }
+    .footer-grid{ grid-template-columns:1fr 1fr; }
+    .detail-hero{ height:44vh; }
+  }
+  @media (max-width:520px){ .nav-actions{ gap:8px; } .nav-actions .btn{ white-space:nowrap; padding:10px 13px; font-size:13px; } }
+  .btn .short{ display:none; }
+  @media (max-width:980px){ .nav-actions .long{ display:none; } .nav-actions .short{ display:inline; } }
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="wrap nav">
+    <a href="index.html" class="logo"><img src="ela-logo-mark.png" alt="ELA - Enviable Logistics"></a>
+    <nav><ul>
+      <li><a href="about.html">About</a></li>
+      <li><a href="services.html" class="active">Services</a></li>
+      <li><a href="team.html">Team</a></li>
+      <li><a href="careers.html">Careers</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul></nav>
+    <div class="nav-actions">
+      <a href="index.html#contact" class="btn btn-ghost"><span class="long">Business partner account</span><span class="short">Partner account</span></a>
+      <a href="index.html#app" class="btn btn-primary">Download app</a>
+    </div>
+  </div>
+</header>
+
+<div class="back-row">
+  <div class="wrap">
+    <a href="services.html" class="back-link">← All services</a>
+  </div>
+</div>
+
+<div class="detail-hero">
+  <img id="hero-img" src="" alt="">
+  <div class="overlay"></div>
+  <div class="content">
+    <div class="wrap">
+      <span class="product-tag" id="hero-tag" style="display:none;"></span>
+      <h1 id="hero-title">Service</h1>
+      <p class="dh-sub" id="hero-sub"></p>
+      <div class="dh-ctas" id="hero-ctas"></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap detail-body">
+  <div class="detail-grid">
+    <div class="detail-main" id="main-content">
+      <!-- populated by JS -->
+    </div>
+    <aside class="detail-side">
+      <div class="side-card reveal" id="side-stats">
+        <h4>At a glance</h4>
+        <!-- populated by JS -->
+      </div>
+      <a href="book.html" class="btn btn-primary reveal" id="side-cta-1">Book now</a>
+      <a href="index.html#contact" class="btn btn-ghost reveal" id="side-cta-2">Talk to the team</a>
+    </aside>
+  </div>
+</div>
+
+<section class="foms-band" id="foms"></section>
+<section class="why-band" id="why-unit"></section>
+<section class="unit-team" id="unit-team"></section>
+<section class="faq-band" id="faq-unit"></section>
+
+<div class="wrap related">
+  <h3>Other services</h3>
+  <div class="related-grid" id="related-grid">
+    <!-- populated by JS -->
+  </div>
+</div>
+
+<div class="cta-band">
+  <div class="wrap">
+    <div>
+      <h2>Not sure which service fits?</h2>
+      <p>Tell us what you're moving — we'll route it to the right product.</p>
+    </div>
+    <div style="display:flex; gap:12px;">
+      <a href="book.html" class="btn btn-ghost">Book now</a>
+      <a href="index.html#contact" class="btn btn-primary" style="background:var(--brand);">Talk to the team</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <a href="index.html" class="logo" style="margin-bottom:14px;"><img src="ela-logo-mark.png" alt="ELA - Enviable Logistics" style="height:28px;"></a>
+        <p style="color:var(--muted); font-size:14px; max-width:260px;">Enviable Logistics Ltd — moving Lagos, Nigeria, and beyond, one tracked route at a time.</p>
+      </div>
+      <div><h5>Company</h5><ul><li><a href="about.html">About us</a></li><li><a href="services.html">Services</a></li><li><a href="team.html">Team</a></li><li><a href="careers.html">Careers</a></li><li><a href="index.html#contact">Contact us</a></li></ul></div>
+      <div><h5>Help &amp; support</h5><ul><li><a href="offices.html">Our offices</a></li><li><a href="book.html?tab=track">Track a shipment</a></li><li><a href="book.html?tab=manage">Manage booking</a></li><li><a href="tel:+2348038802353">Call us</a></li><li><a href="index.html#contact">Email us</a></li></ul></div>
+      <div>
+        <h5>Follow</h5>
+        <div class="socials">
+          <a href="#" aria-label="X">X</a>
+          <a href="https://www.instagram.com/enviablelogistics/" aria-label="Instagram">IG</a>
+          <a href="#" aria-label="Facebook">FB</a>
+          <a href="#" aria-label="YouTube">YT</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Enviable Logistics Ltd.</span>
+      <span style="display:flex; gap:18px;"><a href="#">Terms of Service</a><a href="#">Privacy &amp; Policy</a><a href="#">Account deletion</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+  // ---- service data (content drawn from the ELA business-unit reference) ----
+  const SERVICES = {
+    'ela-haul': {
+      name: `ELA Haul`, tag: `ELA HAUL`, title: `Long-haul & cross-border freight`,
+      img: `https://images.unsplash.com/photo-1682033240184-262fdb8234cb?auto=format&fit=crop&w=1600&q=80`,
+      tagline: `Heavy freight moved with certainty: a 500+ truck fleet, every trip numbered and tracked.`,
+      lede: `When a business needs tonnes moved across the country, it needs certainty, not a phone number and a prayer. ELA Haul is our heavy-freight arm: a fleet of 500+ CNG and diesel trucks running full and part loads nationwide and across borders, with every trip numbered, tracked, and accounted for on ELA-FOMS.`,
+      overview: [
+        `Whether it's a single consignment or a standing supply route, HAUL gives you one accountable partner from loading to delivery, backed by ELA's offices, terminals and corridor checkpoints across Nigeria.`,
+        `Because freight varies by load, distance and cargo, HAUL is quoted by our team rather than by an instant calculator. You talk to a specialist and get a quote built around your shipment.`
+      ],
+      book: [
+        [`Full truckload (FTL)`, `A whole truck committed to your consignment, loaded once and driven point to point.`],
+        [`Part & shared loads`, `Moving less than a full truck? Share truck capacity instead of booking a whole vehicle.`],
+        [`Container haulage from the ports`, `Containers collected from the ports and hauled on to their destination.`],
+        [`Project & heavy cargo`, `Heavy, bulky or project-specific cargo, planned and moved as a dedicated job.`],
+        [`Dedicated fleet contracts`, `Trucks committed to your routes on an ongoing contract, so capacity is there when you need it.`]
+      ],
+      steps: [
+        [`Tell us what you're moving`, `Share the load, origin and destination with the Haul team.`],
+        [`We plan the trip`, `A route is planned and a truck from the fleet is assigned to your consignment.`],
+        [`Every trip is numbered and tracked`, `Your movement is logged on ELA-FOMS from loading, so it is accounted for the whole way.`],
+        [`Delivered and documented`, `Delivery is confirmed and the paperwork closed out, with a record you can rely on.`]
+      ],
+      builtForTitle: `Industries we move for`,
+      builtFor: [`FMCG`,`Manufacturing`,`Retail`,`E-commerce`,`Pharmaceuticals`,`Agriculture`,`Construction`,`Industrial goods`,`Beverage`,`Consumer goods`],
+      why: [
+        [`A fleet of 500+`, `CNG and diesel trucks, maintained to keep goods moving on schedule.`],
+        [`Every trip accounted for`, `Pre-numbered records and gap detection on ELA-FOMS: one accountable system.`],
+        [`Nationwide and across borders`, `Offices, terminals and control points across Nigeria for local presence and faster response.`]
+      ],
+      team: [[`Felix Omorodion`,`Head of Business Operations`],[`Uzo Ibezimakor Ugochukwu`,`Head of Commercial`],[`Monday Ndifreke`,`Operations & Port Manager`],[`Uwazie Mentus`,`Fleet & Asset Manager`],[`Njoku Austine`,`Fleet & Asset Manager`],[`Joel Chizoba`,`Fleet & Asset Manager`],[`Paulson Ikeji`,`Fleet & Asset Manager`],[`Dorcas Awoyiniyi`,`Operations Coordinator`],[`Ikemefuna Muoma`,`Dispatch Coordinator`],[`Adekunle Oyesode`,`Documentation & Compliance`]],
+      faqs: [
+        [`How is ELA Haul priced?`, `Freight varies by load, distance and cargo, so HAUL is quoted by our team. Request a quote and a specialist will walk through your shipment with you.`],
+        [`Can I book less than a full truck?`, `Yes. Besides full truckloads (FTL), HAUL runs part and shared loads.`],
+        [`Do you move containers from the ports?`, `Yes. Container haulage from the ports is part of HAUL.`],
+        [`Can I follow my freight?`, `Every trip is numbered, tracked and accounted for on ELA-FOMS.`]
+      ],
+      stats: [[`500+`,`Trucks in fleet`],[`FTL & part load`,`Load types`],[`Nationwide`,`& cross-border`]],
+      cta: [[`Get a freight quote`,`book.html?tab=haul`],[`Talk to the Haul team`,`index.html#contact`]]
+    },
+
+    'ela-click': {
+      name: `ELA Click`, tag: `ELA CLICK + ERRAND`, title: `Last-mile & e-commerce delivery`,
+      img: `https://images.unsplash.com/photo-1779583350228-566db01e9049?auto=format&fit=crop&w=1600&q=80`,
+      tagline: `Same-day city delivery on 300+ e-bikes, booked in seconds.`,
+      lede: `E-commerce lives or dies on the last mile. ELA Click is our same-day delivery network, 300+ e-bikes moving parcels across the city in minutes. Book in seconds on the ELA app; the job lands instantly on the nearest rider's ELA Rider app, and your parcel is on its way. Add the ELA Errand add-on to turn any run into a personal assistant: pickups, drop-offs, and pay-on-behalf, handled.`,
+      overview: [
+        `You can book on the ELA website or the app, and the job is dispatched to the nearest rider instantly: no phone calls, no waiting for a callback.`,
+        `Because the fleet is electric, CLICK is also the lower-emission way to move parcels across the city.`
+      ],
+      book: [
+        [`Same-day city delivery`, `Parcels collected and delivered across the city within the same day.`],
+        [`Instant booking & rider dispatch`, `Book in seconds; the job lands straight on the nearest rider's ELA Rider app.`],
+        [`Scheduled delivery`, `Plan ahead and book a delivery for the time that suits you.`],
+        [`E-commerce fulfilment`, `Last-mile delivery for online stores, from the order to your customer's door.`],
+        [`Errand add-on`, `Pickups, drop-offs, queueing and pay-on-behalf, handled by a verified rider.`]
+      ],
+      addon: { title: `Add ELA Errand to any run`, text: `Turn a Click run into a personal assistant: pickups, drop-offs, queueing and pay-on-behalf, handled by a verified rider.`, label: `See how Errand works`, href: `service-detail.html?id=ela-errands` },
+      steps: [
+        [`Book in seconds`, `Use the ELA app or website: add the pickup, the drop-off and your parcel details.`],
+        [`Instant dispatch`, `The job lands immediately on the nearest rider's ELA Rider app.`],
+        [`Track it live`, `Follow your rider as your parcel moves across the city.`],
+        [`Delivered`, `Your parcel arrives and the delivery is confirmed.`]
+      ],
+      builtForTitle: `Built for`,
+      builtFor: [`Online stores & merchants`,`Retailers`,`Individuals sending parcels across town`,`Anyone who needs a task run (Errand)`],
+      why: [
+        [`Electric and lower-emission`, `300+ delivery e-bikes keep the city moving with zero tailpipe emissions.`],
+        [`Verified riders`, `Riders are identity-checked before they move, and every trip is numbered and recorded.`],
+        [`Real-time visibility`, `Track every parcel live. No black boxes, no guessing where things are.`]
+      ],
+      team: [[`Augustine Ogunna`,`Head of Business Operations, ELA Click`]],
+      faqs: [
+        [`How do I book?`, `On the ELA app or website. Your job is dispatched to the nearest rider instantly.`],
+        [`How much will it cost?`, `Enter your pickup and drop-off on our quote page to see an estimate.`],
+        [`What is ELA Errand?`, `An add-on to any Click request: pickups, drop-offs, queueing and pay-on-behalf tasks, handled by a verified rider.`],
+        [`Can I track my parcel?`, `Yes, live from pickup to delivery.`]
+      ],
+      stats: [[`300+`,`E-bikes`],[`Same-day`,`Typical turnaround`],[`0g`,`Tailpipe emissions`]],
+      cta: [[`Book a delivery`,`book.html?tab=bike`],[`Get the app`,`index.html#app`]]
+    },
+
+    'ela-transport': {
+      name: `ELA Transport`, tag: `ELA TRANSPORT`, title: `Interstate passenger movement`,
+      img: `https://images.unsplash.com/photo-1677843728721-7737722cff34?auto=format&fit=crop&w=1600&q=80`,
+      tagline: `Safe, scheduled, dignified travel across Nigeria, terminal to terminal.`,
+      lede: `Interstate travel in Nigeria should be safe, scheduled, and dignified. ELA Transport is our passenger-movement arm, terminal-to-terminal travel across the country on a 100+ bus fleet, in the tradition of the great Nigerian road transporters, rebuilt around verified drivers, fixed schedules, and real accountability.`,
+      overview: [
+        `Routes run between ELA terminals across the country, so you board from a known location on a fixed schedule rather than at the roadside.`,
+        `Groups and teams travelling together can also arrange group and charter travel.`
+      ],
+      book: [
+        [`Interstate passenger travel`, `Seats on scheduled buses between Nigerian cities.`],
+        [`Terminal-to-terminal routes nationwide`, `Board and alight at ELA terminals, with 17 passenger terminals across the country.`],
+        [`Online seat booking & manage-my-booking`, `Reserve your seat online and manage your booking without a phone call.`],
+        [`Group & charter travel`, `Move a team, a family or an event party together on a dedicated arrangement.`],
+        [`Verified drivers on every route`, `Every driver is identity-checked before they move.`]
+      ],
+      steps: [
+        [`Choose your route`, `Pick your origin and destination terminal.`],
+        [`Book your seat`, `Reserve online, and manage or change your booking whenever you need to.`],
+        [`Arrive at the terminal`, `Check in at the ELA terminal ahead of your scheduled departure.`],
+        [`Travel with a verified driver`, `Ride a fixed-schedule, terminal-to-terminal service.`]
+      ],
+      builtForTitle: `Built for`,
+      builtFor: [`Individual travellers`,`Families`,`Teams and event groups (charter)`],
+      why: [
+        [`Verified drivers`, `Drivers are identity-checked before they move; every trip is numbered and recorded.`],
+        [`Fixed schedules`, `Departures you can plan around, not a bus that leaves when it fills.`],
+        [`A real terminal network`, `17 passenger terminals, from Lagos and Ibadan to Abuja, Kano and Port Harcourt.`]
+      ],
+      team: [[`Michael Okpala`,`Head of Business Operations, ELA Transport`]],
+      faqs: [
+        [`Where do the buses depart from?`, `From ELA terminals. Browse the full list on our offices page.`],
+        [`Can I change my booking?`, `Yes. Online seat booking comes with manage-my-booking.`],
+        [`Do you offer group or charter travel?`, `Yes, for groups and teams travelling together.`],
+        [`Are drivers verified?`, `Yes. Every driver is identity-checked before they move.`]
+      ],
+      stats: [[`100+`,`Buses in fleet`],[`17`,`Passenger terminals`],[`Nationwide`,`Coverage`]],
+      cta: [[`Book a seat`,`book.html?tab=seat`],[`Find a terminal`,`offices.html`]]
+    },
+
+    'ela-go': {
+      name: `ELA Go`, tag: `ELA GO`, title: `Full courier, door to door`,
+      img: `https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&w=1600&q=80`,
+      tagline: `Parcels and documents moved door to door across Nigeria, tracked and confirmed.`,
+      lede: `When speed and proof matter, ELA Go delivers. Our full courier service moves parcels and documents door to door across Nigeria, tracked end to end and confirmed on delivery, built to the standard the global couriers set and local ones rarely meet.`,
+      overview: [
+        `GO reaches beyond the city radius that CLICK covers, so a parcel can leave one city and arrive at a door in another under one tracked consignment.`,
+        `Business and e-commerce accounts are available for senders with regular shipments.`
+      ],
+      book: [
+        [`Nationwide parcel & document courier`, `Parcels and documents moved between cities across Nigeria.`],
+        [`Door-to-door pickup & delivery`, `Collected from the sender's door and delivered to the recipient's.`],
+        [`Business & e-commerce accounts`, `Set up for regular shipments, with accounts built around how businesses send.`],
+        [`Digital proof of delivery`, `A timestamped, confirmed delivery record for every consignment.`],
+        [`End-to-end tracking`, `Follow the consignment from pickup to the recipient's door.`]
+      ],
+      steps: [
+        [`Book your pickup`, `Enter the sender and recipient details, or use a business account for regular shipments.`],
+        [`We collect from your door`, `Your parcel or document is picked up from the sender.`],
+        [`Moved nationwide, tracked end to end`, `It travels the ELA network and you can follow it on the way.`],
+        [`Delivered and confirmed`, `The recipient receives it at their door, and you get digital proof of delivery.`]
+      ],
+      builtForTitle: `Built for`,
+      builtFor: [`Businesses with regular shipments`,`E-commerce sellers`,`Anyone sending parcels or documents to another city`],
+      why: [
+        [`Proof on every delivery`, `Timestamped, confirmed delivery records: no disputes, no missing paperwork.`],
+        [`End-to-end tracking`, `Track every parcel live, shared with the customer from pickup to delivery.`],
+        [`One accountable partner`, `One partner accountable end to end, so you never carry the gaps between providers.`]
+      ],
+      team: [[`Aloy Amajuoyi`,`Head of Business Operations, ELA Go`]],
+      faqs: [
+        [`How far does ELA Go deliver?`, `Nationwide, door to door.`],
+        [`Can my business open an account?`, `Yes. Business and e-commerce accounts are available. Send an enquiry through our contact section.`],
+        [`How will I know it was delivered?`, `Every delivery is confirmed with digital proof of delivery.`],
+        [`How is it different from ELA Click?`, `Click is same-day delivery within a city on e-bikes. Go is full courier, door to door, across Nigeria.`]
+      ],
+      stats: [[`Nationwide`,`Coverage`],[`Door-to-door`,`Service`],[`Digital`,`Proof of delivery`]],
+      cta: [[`Send with ELA Go`,`book.html?tab=go`],[`Business account enquiry`,`index.html#contact`]]
+    },
+
+    'ela-express': {
+      name: `ELA Express`, tag: `ELA EXPRESS`, title: `Time-definite express courier`,
+      img: `https://images.unsplash.com/photo-1607273685680-6bd976c5a5ce?auto=format&fit=crop&w=1600&q=80`,
+      tagline: `For when “soon” is not good enough: same-day and next-day on a fixed promise.`,
+      lede: `ELA Express is time-definite courier for when “soon” is not good enough. Same-day and next-day delivery on a fixed promise, with digital proof of delivery on every consignment, the fast lane of the ELA network.`,
+      overview: [
+        `EXPRESS moves on a time-definite promise rather than an open-ended estimate, so you know when it will arrive.`,
+        `You can arrange a priority or on-demand pickup, or use ELA drop-off and pickup points.`
+      ],
+      book: [
+        [`Same-day delivery`, `Collected and delivered on the same day, on a fixed promise.`],
+        [`Next-day, time-definite`, `Delivery committed for the next day, not left open-ended.`],
+        [`Priority & on-demand pickup`, `Request a pickup when you need it, with priority handling.`],
+        [`Digital proof of delivery`, `A timestamped, confirmed delivery record on every consignment.`],
+        [`Drop-off & pickup points`, `Hand over or collect at an ELA point instead of waiting at home.`]
+      ],
+      steps: [
+        [`Choose your speed`, `Same-day or next-day, on a fixed promise.`],
+        [`Arrange pickup or drop-off`, `Request a priority, on-demand pickup, or drop your item at an ELA point.`],
+        [`It moves on the fast lane`, `Your consignment travels the ELA network and is tracked on its way.`],
+        [`Confirmed on delivery`, `You receive digital proof of delivery on every consignment.`]
+      ],
+      builtForTitle: `Built for`,
+      builtFor: [`Urgent documents`,`Time-critical parcels`,`Businesses with enterprise courier needs`],
+      why: [
+        [`A fixed promise`, `Time-definite delivery, not “it will get there when it gets there”.`],
+        [`Proof on every consignment`, `Timestamped, confirmed delivery records: no disputes, no missing paperwork.`],
+        [`The ELA network behind it`, `Offices, terminals and control points across Nigeria support every express run.`]
+      ],
+      team: [],
+      faqs: [
+        [`What does “time-definite” mean?`, `Your delivery is committed to same-day or next-day on a fixed promise, rather than an open-ended estimate.`],
+        [`Can I drop my parcel off instead of waiting for a pickup?`, `Yes. Drop-off and pickup points are available.`],
+        [`Do I get proof of delivery?`, `Yes. Digital proof of delivery on every consignment.`],
+        [`Can my business set up regular express shipments?`, `Yes. Send us an enterprise enquiry through our contact section.`]
+      ],
+      stats: [[`Same-day`,`& next-day`],[`Fixed`,`Delivery promise`],[`Digital`,`Proof of delivery`]],
+      cta: [[`Request an express pickup`,`index.html#contact`],[`Compare with ELA Go`,`service-detail.html?id=ela-go`]]
+    },
+
+    'ela-errands': {
+      name: `ELA Errand`, tag: `ELA ERRAND · CLICK ADD-ON`, title: `Errands & quick runs`,
+      img: `https://images.unsplash.com/photo-1588964895597-cfccd6e2dbf9?auto=format&fit=crop&w=1600&q=80`,
+      tagline: `Whatever you would send someone to do, a verified rider does it for you.`,
+      lede: `ELA Errand turns any ELA Click run into a personal assistant. Whatever you would send someone to do, a verified ELA rider does it for you, and you track every step from your phone.`,
+      overview: [
+        `Errand runs on the same rider network as ELA Click. It is an add-on you choose on any Click request in the ELA app, not a separate service to set up.`
+      ],
+      book: [
+        [`Pickups`, `A verified rider collects something for you and brings it where you need it.`],
+        [`Drop-offs`, `Send an item somewhere without leaving what you're doing.`],
+        [`Queue & pay-on-behalf`, `A rider handles the queue or pays on your behalf, then confirms it's done.`]
+      ],
+      steps: [
+        [`Open the ELA app`, `Choose Errand on any Click request.`],
+        [`Describe the task`, `Tell us the task (a pickup, a drop-off, or pay-on-behalf) and the locations.`],
+        [`A rider heads out`, `A verified ELA rider receives the job instantly on the ELA Rider app and heads straight out.`],
+        [`Track live`, `Follow your rider from start to finish.`],
+        [`Done`, `Task complete: you get instant, cashless confirmation.`]
+      ],
+      builtForTitle: `Built for`,
+      builtFor: [`Busy individuals`,`Small businesses without spare hands`,`Anyone who needs something collected, delivered or paid for`],
+      why: [
+        [`Verified riders`, `Riders are identity-checked before they move, and every task is recorded.`],
+        [`Live tracking`, `Track your rider live, from start to finish. No guessing.`],
+        [`Cashless confirmation`, `Task done, and you get instant, cashless confirmation.`]
+      ],
+      team: [],
+      faqs: [
+        [`Is Errand a separate service?`, `It is an add-on to ELA Click. Choose Errand on any Click request in the ELA app.`],
+        [`Who does the errand?`, `A verified ELA rider.`],
+        [`Can I follow the rider?`, `Yes, live from start to finish.`],
+        [`How do I know it's done?`, `You get instant, cashless confirmation.`]
+      ],
+      stats: [[`Add-on`,`to ELA Click`],[`Live`,`Rider tracking`],[`Cashless`,`Confirmation`]],
+      cta: [[`Start an errand in the app`,`index.html#app`],[`Book via ELA Click`,`book.html?tab=bike`]]
+    }
+  };
+
+  const FOMS = [
+    [`Real-time tracking`, `Track every truck, bus, parcel, and rider live, shared with the customer, end to end.`, `<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/>`],
+    [`Digital proof of delivery`, `Timestamped, confirmed delivery records. No disputes, no missing paperwork.`, `<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>`],
+    [`Pre-numbered trip registers`, `Pre-numbered trip and asset registers with gap detection built in.`, `<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v16"/>`],
+    [`ELA app & digital presence`, `Book delivery, courier, and travel, manage it, and track it live, ELA's digital front door, in your pocket.`, `<rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/>`]
+  ];
+
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id') || 'ela-haul';
+  const svc = SERVICES[id] || SERVICES['ela-haul'];
+  const $ = k => document.getElementById(k);
+  const initials = n => n.replace(/[^A-Za-z ]/g,'').split(' ').filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+  const arrow = ` <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11L11 3M11 3H4M11 3V10"/></svg>`;
+  const check = `<svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>`;
+
+  // ---- hero ----
+  document.getElementById('pagetitle').textContent = svc.title + ' — ELA | Enviable Logistics';
+  $('hero-img').src = svc.img;
+  $('hero-img').alt = svc.title;
+  $('hero-title').textContent = svc.title;
+  $('hero-sub').textContent = svc.tagline;
+  const tagEl = $('hero-tag'); tagEl.textContent = svc.tag; tagEl.style.display = 'inline-block';
+  $('hero-ctas').innerHTML =
+    `<a class="btn btn-light" href="${svc.cta[0][1]}">${svc.cta[0][0]}${arrow}</a>` +
+    `<a class="btn btn-outline-light" href="${svc.cta[1][1]}">${svc.cta[1][0]}</a>`;
+
+  // ---- main column ----
+  let h = `<p class="lede">${svc.lede}</p>`;
+  svc.overview.forEach(p => h += `<p>${p}</p>`);
+  h += `<h2 class="dm-h">What you can book</h2><div class="book-grid">` +
+       svc.book.map(([t,d]) => `<div class="book-card"><span class="bc-check">${check}</span><h3>${t}</h3><p>${d}</p></div>`).join('') + `</div>`;
+  if(svc.addon){
+    h += `<div class="addon-card"><div><h3>${svc.addon.title}</h3><p>${svc.addon.text}</p></div><a class="btn btn-primary" href="${svc.addon.href}">${svc.addon.label}${arrow}</a></div>`;
+  }
+  h += `<h2 class="dm-h">How it works</h2><ol class="steps">` +
+       svc.steps.map(([t,d],i) => `<li><span class="sn">${i+1}</span><div><h4>${t}</h4><p>${d}</p></div></li>`).join('') + `</ol>`;
+  h += `<h2 class="dm-h">${svc.builtForTitle}</h2><div class="chips">` + svc.builtFor.map(c => `<span>${c}</span>`).join('') + `</div>`;
+  $('main-content').innerHTML = h;
+
+  // ---- sidebar ----
+  $('side-stats').innerHTML = '<h4>At a glance</h4>' + svc.stats.map(([v,l]) => `<div class="side-stat"><span class="v">${v}</span><span class="l">${l}</span></div>`).join('');
+  $('side-cta-1').textContent = svc.cta[0][0]; $('side-cta-1').href = svc.cta[0][1];
+  $('side-cta-2').textContent = svc.cta[1][0]; $('side-cta-2').href = svc.cta[1][1];
+
+  // ---- ELA-FOMS band (shared) ----
+  $('foms').innerHTML = `<div class="wrap">
+    <div class="foms-head"><p class="eyebrow">Technology</p><h2>Powered by ELA-FOMS</h2>
+    <p>ELA-FOMS is the operating layer beneath all five units, the system that turns a fleet into an accountable network. Real-time tracking, digital proof, and a fully digital presence across app, web, and partner dashboard put every movement in your hand.</p></div>
+    <div class="foms-grid">` + FOMS.map(([t,d,ic]) => `<div class="foms-item"><div class="fi"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${ic}</svg></div><h3>${t}</h3><p>${d}</p></div>`).join('') + `</div></div>`;
+
+  // ---- why ----
+  $('why-unit').innerHTML = `<div class="wrap"><p class="eyebrow">Why ${svc.name}</p><h2>Built on a standard you can rely on.</h2>
+    <div class="why-grid">` + svc.why.map(([t,d],i) => `<div class="why-card"><span class="wn">0${i+1}</span><h3>${t}</h3><p>${d}</p></div>`).join('') + `</div></div>`;
+
+  // ---- team ----
+  if(svc.team.length){
+    $('unit-team').innerHTML = `<div class="wrap"><p class="eyebrow">The team</p><h2>The people who run ${svc.name}.</h2>
+      <div class="ut-grid">` + svc.team.map(([n,r]) => `<div class="ut-card"><span class="ut-av">${initials(n)}</span><div><b>${n}</b><i>${r}</i></div></div>`).join('') + `</div></div>`;
+  } else { $('unit-team').style.display = 'none'; }
+
+  // ---- FAQ ----
+  $('faq-unit').innerHTML = `<div class="wrap faq-wrap">
+    <div class="faq-side"><p class="eyebrow">FAQ</p><h2>Questions about ${svc.name}.</h2>
+      <p class="sub">Can't find what you need? Our team will answer directly.</p>
+      <a class="btn btn-ghost" href="index.html#contact">Talk to the team</a></div>
+    <div class="faq-list">` + svc.faqs.map(([q,a],i) => `<div class="faq-item${i===0?' open':''}"><button class="faq-q" aria-expanded="${i===0}"><span>${q}</span><span class="pm"></span></button><div class="faq-a"><div><p>${a}</p></div></div></div>`).join('') + `</div></div>`;
+  document.querySelectorAll('.faq-q').forEach(btn => btn.addEventListener('click', () => {
+    const item = btn.parentElement, open = !item.classList.contains('open');
+    item.classList.toggle('open', open); btn.setAttribute('aria-expanded', open);
+  }));
+
+  // related: pick 3 other services
+  const relGrid = document.getElementById('related-grid');
+  const others = Object.keys(SERVICES).filter(k => k !== id).slice(0, 3);
+  relGrid.innerHTML = others.map(k => {
+    const s = SERVICES[k];
+    return `<a href="service-detail.html?id=${k}" class="rel-card" data-cursor="View">
+      <img src="${s.img}" alt="${s.title}">
+      <div class="overlay"></div>
+      <div class="rc-content"><h4>${s.title}</h4></div>
+    </a>`;
+  }).join('');
+
+  // ---- animation & interactions ----
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', ()=>{
+    header.classList.toggle('scrolled', window.scrollY > 8);
+  }, {passive:true});
+
+  function showEverything(){
+    document.querySelectorAll('.reveal').forEach(el=> el.style.opacity = 1);
+    document.querySelectorAll('.steps li').forEach(li=> li.classList.add('on'));
+  }
+
+  if(typeof gsap === 'undefined'){
+    showEverything();
+  } else if(reduceMotion){
+    gsap.set('.reveal', {opacity:1});
+    document.querySelectorAll('.steps li').forEach(li=> li.classList.add('on'));
+  } else {
+    try {
+      gsap.registerPlugin(ScrollTrigger);
+
+      gsap.timeline({defaults:{ease:'power3.out'}})
+        .fromTo('.detail-hero img', {scale:1.15}, {scale:1, duration:1.2, ease:'power2.out'})
+        .from('.detail-hero .product-tag', {opacity:0, y:14, duration:.4}, '-=.6')
+        .from('.detail-hero h1', {opacity:0, y:24, duration:.6}, '-=.3')
+        .from('.detail-hero .dh-sub', {opacity:0, y:16, duration:.5}, '-=.3')
+        .from('.dh-ctas .btn', {opacity:0, y:14, duration:.45, stagger:.1}, '-=.25');
+
+      gsap.utils.toArray('.reveal').forEach((el,i)=>{
+        gsap.fromTo(el, {opacity:0, y:18}, {
+          opacity:1, y:0, duration:.6, delay:i*.05, ease:'power3.out', clearProps:'transform',
+          scrollTrigger:{trigger:el, start:'top 90%'}
+        });
+      });
+
+      // overview + section headings
+      gsap.from('.detail-main .lede, .detail-main > p', {opacity:0, y:20, duration:.6, stagger:.08, ease:'power3.out', scrollTrigger:{trigger:'.detail-main', start:'top 85%'}});
+      gsap.utils.toArray('.dm-h').forEach(el => gsap.from(el, {opacity:0, y:16, duration:.5, scrollTrigger:{trigger:el, start:'top 90%'}}));
+
+      // what you can book
+      gsap.from('.book-card', {opacity:0, y:28, duration:.6, stagger:.08, ease:'power3.out', clearProps:'transform', scrollTrigger:{trigger:'.book-grid', start:'top 85%'}});
+      if(document.querySelector('.addon-card')) gsap.from('.addon-card', {opacity:0, y:20, duration:.6, scrollTrigger:{trigger:'.addon-card', start:'top 90%'}});
+
+      // how it works: each step lights up as it is reached, and the line fills behind it
+      gsap.utils.toArray('.steps li').forEach(li => {
+        gsap.from(li, {opacity:0, x:-22, duration:.55, ease:'power3.out', clearProps:'transform', scrollTrigger:{trigger:li, start:'top 88%'}});
+        ScrollTrigger.create({trigger:li, start:'top 75%', onEnter:()=> li.classList.add('on')});
+      });
+
+      gsap.from('.chips span', {opacity:0, y:12, scale:.92, duration:.4, stagger:.04, ease:'back.out(1.8)', clearProps:'transform', scrollTrigger:{trigger:'.chips', start:'top 90%'}});
+
+      // full-width sections
+      gsap.from('.foms-head > *', {opacity:0, y:20, duration:.6, stagger:.1, scrollTrigger:{trigger:'.foms-band', start:'top 80%'}});
+      gsap.from('.foms-item', {opacity:0, y:30, duration:.6, stagger:.09, ease:'power3.out', clearProps:'transform', scrollTrigger:{trigger:'.foms-grid', start:'top 88%'}});
+      gsap.from('.why-band .wrap > .eyebrow, .why-band h2', {opacity:0, y:16, duration:.5, stagger:.08, scrollTrigger:{trigger:'.why-band', start:'top 82%'}});
+      gsap.from('.why-card', {opacity:0, y:34, duration:.65, stagger:.1, ease:'power3.out', clearProps:'transform', scrollTrigger:{trigger:'.why-grid', start:'top 85%'}});
+      if(document.querySelector('.ut-card')){
+        gsap.from('.unit-team .wrap > .eyebrow, .unit-team h2', {opacity:0, y:16, duration:.5, stagger:.08, scrollTrigger:{trigger:'.unit-team', start:'top 82%'}});
+        gsap.from('.ut-card', {opacity:0, y:22, duration:.5, stagger:.06, ease:'power3.out', clearProps:'transform', scrollTrigger:{trigger:'.ut-grid', start:'top 88%'}});
+      }
+      gsap.from('.faq-side > *', {opacity:0, y:18, duration:.55, stagger:.08, scrollTrigger:{trigger:'.faq-band', start:'top 80%'}});
+      gsap.from('.faq-item', {opacity:0, y:18, duration:.5, stagger:.08, scrollTrigger:{trigger:'.faq-list', start:'top 88%'}});
+
+      gsap.utils.toArray('.rel-card').forEach((card,i)=>{
+        gsap.fromTo(card, {opacity:0, y:20}, {
+          opacity:1, y:0, duration:.5, delay:i*.08, ease:'power3.out',
+          scrollTrigger:{trigger:'.related', start:'top 88%'}
+        });
+      });
+
+      gsap.from('.cta-band .wrap > *', {
+        opacity:0, y:20, duration:.6, stagger:.1,
+        scrollTrigger:{trigger:'.cta-band', start:'top 85%'}
+      });
+
+      // scroll-linked parallax (scrub): hero image drifts, related photos alternate
+      gsap.to('.detail-hero img', {
+        yPercent: 8, ease: 'none',
+        scrollTrigger:{ trigger:'.detail-hero', start:'top top', end:'bottom top', scrub:1.1 }
+      });
+      gsap.utils.toArray('.rel-card img').forEach((img, i)=>{
+        const speed = (i % 2 === 0 ? -1 : 1) * (0.06 + (i % 3) * 0.02);
+        gsap.to(img, {
+          yPercent: speed * 100, ease:'none',
+          scrollTrigger:{ trigger: img.closest('.rel-card'), start:'top bottom', end:'bottom top', scrub:1.1 }
+        });
+      });
+    } catch(err){
+      console.error('ELA animation error — falling back to static visible content:', err);
+      showEverything();
+    }
+  }
+</script>
+<script src="site.js"></script>
+
+</body>
+</html>
