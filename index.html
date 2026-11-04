@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ELA — Enviable Logistics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="booking-widget.css">
+<style>
+  /* ============================================
+     BRAND COLOR — swap this one value to match
+     ELA's real brand hex once you confirm it.
+     ============================================ */
+  :root{
+    --brand:#16305E;       /* <- swap this to ELA's actual brand color */
+    --ink:#14161A;
+    --paper:#FFFFFF;
+    --line:#E7E8EB;
+    --muted:#6B7078;
+    --display:'Space Grotesk', sans-serif;
+    --body:'Inter', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{ font-family:var(--body); color:var(--ink); background:var(--paper); line-height:1.55; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+  img{max-width:100%; display:block;}
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 32px;}
+  h1,h2,h3{ font-family:var(--display); font-weight:600; letter-spacing:-0.01em; }
+  .eyebrow{ font-size:13px; font-weight:600; color:var(--brand); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:14px; }
+
+  .btn{ display:inline-flex; align-items:center; gap:8px; padding:13px 26px; border-radius:6px; font-weight:600; font-size:14.5px; border:1px solid transparent; cursor:pointer; transition:filter .15s ease, border-color .15s ease, transform .15s ease; }
+  .btn:focus-visible{ outline:2px solid var(--brand); outline-offset:3px; }
+  .btn-primary{ background:var(--brand); color:#fff; }
+  .btn-primary:hover{ filter:brightness(1.22); transform:translateY(-1px); }
+  .btn-ghost{ background:transparent; color:var(--ink); border-color:var(--line); }
+  .btn-ghost:hover{ border-color:var(--ink); transform:translateY(-1px); }
+
+  /* scroll-progress rail — fixed vertical line tracking whole-page
+     scroll position, with a marker sliding from top to bottom */
+  .progress-rail{ position:fixed; right:40px; top:110px; bottom:36px; z-index:40; display:flex; flex-direction:column; align-items:center; pointer-events:none; }
+  .pr-label{ font-family:var(--display); font-size:10px; font-weight:600; letter-spacing:0.14em; color:var(--muted); writing-mode:vertical-rl; text-orientation:mixed; }
+  .pr-track{ flex:1; width:1px; background:var(--line); position:relative; margin:16px 0; }
+  .pr-marker{ position:absolute; left:50%; top:0%; width:7px; height:7px; background:var(--brand); border-radius:1.5px; transform:translate(-50%,-50%); will-change:top; }
+  @media (max-width:1100px){ .progress-rail{ display:none; } }
+
+  /* header */
+  header{ position:sticky; top:0; z-index:50; background:rgba(255,255,255,0.92); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); transition:box-shadow .25s ease; }
+  header.scrolled{ box-shadow:0 6px 20px -12px rgba(20,22,26,0.15); }
+  .nav{ display:flex; align-items:center; justify-content:space-between; height:72px; }
+  .logo{ display:inline-flex; align-items:center; }
+  .logo img{ height:26px; width:auto; display:block; }
+  nav ul{ display:flex; gap:34px; list-style:none; }
+  nav ul a{ font-size:14.5px; color:var(--muted); position:relative; padding-bottom:3px; }
+  nav ul a::after{ content:""; position:absolute; left:0; bottom:0; width:0; height:1.5px; background:var(--brand); transition:width .2s ease; }
+  nav ul a:hover{ color:var(--ink); }
+  nav ul a:hover::after{ width:100%; }
+  .nav-actions{ display:flex; align-items:center; gap:12px; }
+
+  /* hero: headline, short intro and the booking widget */
+  .hero{ position:relative; padding:76px 0 84px; background:#F7F9FC; border-bottom:1px solid var(--line); overflow:hidden; }
+  .hero > .wrap{ position:relative; z-index:2; }
+  .hero-inner{ max-width:900px; margin:0 auto 34px; text-align:center; }
+  .hero h1{ font-size:clamp(34px,5.2vw,64px); line-height:1.04; margin-bottom:18px; letter-spacing:-0.02em; }
+  .hero p.lede{ font-size:clamp(16px,1.5vw,18.5px); color:var(--muted); max-width:640px; margin:0 auto; }
+  .word-mask{ overflow:hidden; display:inline-block; vertical-align:top; }
+  .word{ display:inline-block; }
+  .hero .bk-widget{ max-width:1040px; margin:0 auto; }
+  @media (max-width:720px){ .hero{ padding:48px 0 52px; } .hero-inner{ margin-bottom:24px; } }
+
+  /* image band */
+  .image-band{ position:relative; height:280px; overflow:hidden; }
+  .image-band img{ width:100%; height:130%; object-fit:cover; position:absolute; top:-15%; left:0; will-change:transform; }
+  .image-band .overlay{ position:absolute; inset:0; background:linear-gradient(90deg, rgba(20,22,26,0.72), rgba(20,22,26,0.15)); display:flex; align-items:center; }
+  .image-band .msg{ color:#fff; padding:0 32px; font-family:var(--display); font-size:22px; font-weight:600; margin:0 auto; width:100%; max-width:1120px; }
+  .image-band .msg span{ display:block; font-family:var(--body); font-weight:400; font-size:14.5px; color:rgba(255,255,255,0.75); margin-top:8px; max-width:420px; }
+
+  /* trusted-by band — auto-scrolling marquee */
+  .trusted-by{ border-bottom:1px solid var(--line); padding:52px 0; overflow:hidden; }
+  .tb-label{ text-align:center; font-size:12.5px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:30px; }
+  .tb-track-wrap{ overflow:hidden; -webkit-mask-image:linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); mask-image:linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
+  .tb-track{ display:flex; align-items:center; gap:64px; width:max-content; animation:tb-scroll 24s linear infinite; }
+  .trusted-by:hover .tb-track{ animation-play-state:paused; }
+  .tb-logo{ height:30px; width:auto; opacity:0.5; transition:opacity .25s ease; flex-shrink:0; }
+  .tb-logo:hover{ opacity:1; }
+  @keyframes tb-scroll{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce){ .tb-track{ animation:none; } }
+
+  section{ padding:96px 0; }
+  section + section{ border-top:1px solid var(--line); }
+  .section-head{ max-width:560px; margin-bottom:56px; }
+  .section-head.service-head{ max-width:none; display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; }
+  .section-head h2{ font-size:clamp(26px,3vw,34px); }
+  .section-head p{ color:var(--muted); font-size:16px; margin-top:14px; }
+
+  /* features */
+  /* why ELA — bento grid with live micro-visuals */
+  .bento{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .bt{ position:relative; overflow:hidden; border:1px solid var(--line); border-radius:20px; padding:28px; background:#fff; min-height:270px; display:flex; flex-direction:column; justify-content:space-between; gap:22px; transition:transform .4s cubic-bezier(.22,1,.36,1), border-color .3s ease; }
+  .bt:hover{ transform:translateY(-6px); border-color:var(--brand); }
+  .bt::after{ content:""; position:absolute; inset:0; background:radial-gradient(280px circle at var(--mx,50%) var(--my,50%), rgba(22,48,94,0.08), transparent 70%); opacity:0; transition:opacity .3s ease; pointer-events:none; }
+  .bt:hover::after{ opacity:1; }
+  .bt.dark{ background:var(--brand); border-color:var(--brand); color:#fff; }
+  .bt.dark::after{ background:radial-gradient(280px circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,0.14), transparent 70%); }
+  .bt-wide{ grid-column:span 2; }
+  .bt-head{ display:flex; justify-content:space-between; align-items:center; position:relative; z-index:2; }
+  .bt-num{ font-family:var(--display); font-size:12.5px; font-weight:600; color:var(--brand); border:1px solid var(--line); border-radius:999px; padding:3px 11px; }
+  .bt.dark .bt-num{ color:#fff; border-color:rgba(255,255,255,0.3); }
+  .bt h3{ font-size:20px; margin-bottom:8px; position:relative; z-index:2; }
+  .bt p{ color:var(--muted); font-size:14.5px; max-width:380px; position:relative; z-index:2; }
+  .bt.dark p{ color:rgba(255,255,255,0.74); }
+  .bt-wide .bt-copy{ max-width:48%; }
+
+  /* 01 live route */
+  .bt-live{ display:inline-flex; align-items:center; gap:7px; font-size:11.5px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; }
+  .bt-live i{ width:7px; height:7px; border-radius:50%; background:#5BE38A; animation:bt-blink 1.4s ease-in-out infinite; }
+  .bt-route{ position:absolute; right:24px; bottom:26px; width:46%; height:auto; z-index:1; }
+  .bt-route .r-base{ stroke:rgba(255,255,255,0.22); stroke-width:2; stroke-dasharray:5 7; }
+  .bt-route .r-live{ stroke:#fff; stroke-width:2.6; stroke-linecap:round; stroke-dasharray:22 100; animation:bt-run 3.4s linear infinite; }
+  .bt-route circle{ fill:#fff; }
+  .bt-route .r-dot{ fill:#5BE38A; }
+  @keyframes bt-run{ from{ stroke-dashoffset:22; } to{ stroke-dashoffset:-100; } }
+  @keyframes bt-blink{ 0%,100%{ opacity:1; } 50%{ opacity:.25; } }
+
+  /* 02 EV battery */
+  .bt-statrow{ display:flex; align-items:center; justify-content:space-between; gap:16px; position:relative; z-index:2; }
+  .bt-stat{ font-family:var(--display); font-size:68px; font-weight:600; color:var(--brand); line-height:1; }
+  .bt-stat small{ font-size:28px; margin-left:2px; }
+  .bt-batt{ position:relative; width:70px; height:30px; border:2px solid var(--brand); border-radius:8px; }
+  .bt-batt::before{ content:""; position:absolute; left:3px; top:3px; bottom:3px; width:0; background:var(--brand); border-radius:3px; animation:bt-charge 3s ease-in-out infinite; }
+  .bt-batt::after{ content:""; position:absolute; right:-7px; top:8px; width:4px; height:10px; background:var(--brand); border-radius:0 3px 3px 0; }
+  @keyframes bt-charge{ 0%{ width:6%; } 70%,100%{ width:calc(100% - 6px); } }
+
+  /* 03 fleet chips */
+  .bt-chips{ display:flex; flex-wrap:wrap; gap:8px; position:relative; z-index:2; }
+  .bt-chips span{ border:1px solid var(--line); background:#F7F9FC; border-radius:999px; padding:6px 13px; font-size:12.5px; font-weight:600; animation:bt-bob 3.2s ease-in-out infinite; }
+  .bt-chips span:nth-child(2){ animation-delay:.4s; } .bt-chips span:nth-child(3){ animation-delay:.8s; }
+  .bt-chips span:nth-child(4){ animation-delay:1.2s; } .bt-chips span:nth-child(5){ animation-delay:1.6s; }
+  @keyframes bt-bob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-5px); } }
+
+  /* 04 radar / orbit */
+  .bt-radar{ position:absolute; right:40px; top:50%; transform:translateY(-50%); width:180px; height:180px; z-index:1; }
+  .bt-radar .ring{ position:absolute; border:1px solid rgba(22,48,94,0.2); border-radius:50%; }
+  .bt-radar .ring.r1{ inset:0; } .bt-radar .ring.r2{ inset:30px; } .bt-radar .ring.r3{ inset:60px; }
+  .bt-radar .pulse{ position:absolute; inset:0; border-radius:50%; border:1.5px solid var(--brand); animation:bt-pulse 3s ease-out infinite; }
+  .bt-radar .pulse.p2{ animation-delay:1.5s; }
+  .bt-radar .core{ position:absolute; left:50%; top:50%; width:12px; height:12px; margin:-6px 0 0 -6px; border-radius:50%; background:var(--brand); }
+  .bt-radar .orbit{ position:absolute; inset:0; animation:bt-spin 11s linear infinite; }
+  .bt-radar .orbit.o2{ inset:30px; animation-duration:7s; animation-direction:reverse; }
+  .bt-radar .orbit i{ position:absolute; top:-5px; left:50%; width:10px; height:10px; margin-left:-5px; border-radius:50%; background:var(--brand); }
+  .bt-radar .orbit.o2 i{ background:#fff; border:2px solid var(--brand); width:10px; height:10px; box-sizing:border-box; }
+  @keyframes bt-pulse{ 0%{ transform:scale(.3); opacity:.9; } 100%{ transform:scale(1.15); opacity:0; } }
+  @keyframes bt-spin{ to{ transform:rotate(360deg); } }
+
+  /* 05 growing bars */
+  .bt-bars{ position:absolute; right:40px; bottom:30px; display:flex; align-items:flex-end; gap:10px; height:130px; z-index:1; }
+  .bt-bars i{ display:block; width:16px; border-radius:5px; background:var(--brand); transform-origin:bottom; animation:bt-bar 2.8s ease-in-out infinite; }
+  .bt-bars i:nth-child(2){ animation-delay:.2s; } .bt-bars i:nth-child(3){ animation-delay:.4s; }
+  .bt-bars i:nth-child(4){ animation-delay:.6s; } .bt-bars i:nth-child(5){ animation-delay:.8s; } .bt-bars i:nth-child(6){ animation-delay:1s; }
+  @keyframes bt-bar{ 0%,100%{ transform:scaleY(.72); } 50%{ transform:scaleY(1); } }
+
+  /* 06 chat */
+  .bt-chat{ display:flex; flex-direction:column; gap:8px; position:relative; z-index:2; }
+  .bt-chat .bub{ border-radius:14px; height:30px; }
+  .bt-chat .bub.a{ width:62%; background:#EEF3FB; border-bottom-left-radius:4px; }
+  .bt-chat .bub.b{ width:84px; margin-left:auto; background:var(--brand); border-bottom-right-radius:4px; display:flex; align-items:center; justify-content:center; gap:5px; }
+  .bt-chat .bub.b i{ width:6px; height:6px; border-radius:50%; background:#fff; animation:bt-type 1.2s ease-in-out infinite; }
+  .bt-chat .bub.b i:nth-child(2){ animation-delay:.15s; } .bt-chat .bub.b i:nth-child(3){ animation-delay:.3s; }
+  @keyframes bt-type{ 0%,60%,100%{ transform:translateY(0); opacity:.5; } 30%{ transform:translateY(-4px); opacity:1; } }
+
+  @media (prefers-reduced-motion: reduce){ .bt *{ animation:none !important; } .bt-batt::before{ width:80%; } }
+
+  /* services — image cards, ported from services.html for a consistent, richer look */
+  .svc-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+  .svc-card{ position:relative; border-radius:14px; overflow:hidden; aspect-ratio:1/1.08; display:block; background:var(--ink); }
+  .svc-card img.veh{ height:100%; top:0; }
+  .svc-card img{ width:100%; height:124%; object-fit:cover; position:absolute; top:-12%; left:0; transition:transform .6s cubic-bezier(.16,1,.3,1); }
+  .svc-card:hover img{ transform:scale(1.08); }
+  .svc-card .overlay{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(20,22,26,0) 40%, rgba(20,22,26,0.88) 100%); }
+  .svc-card .content{ position:absolute; left:0; right:0; bottom:0; padding:22px; color:#fff; }
+  .svc-card .product-tag{ font-family:var(--display); font-size:11px; font-weight:600; color:#fff; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.35); border-radius:999px; padding:4px 11px; display:inline-block; margin-bottom:10px; backdrop-filter:blur(4px); }
+  .svc-card h3{ font-size:18px; margin-bottom:4px; }
+  .svc-card p{ font-size:13px; color:rgba(255,255,255,0.72); margin-bottom:12px; }
+  .svc-card .arrow{ width:32px; height:32px; border-radius:50%; border:1px solid rgba(255,255,255,0.4); display:flex; align-items:center; justify-content:center; transition:background .2s ease, transform .3s ease; }
+  .svc-card:hover .arrow{ background:#fff; transform:rotate(45deg); }
+  .svc-card:hover .arrow svg{ stroke:var(--ink); }
+  .svc-card .arrow svg{ stroke:#fff; transition:stroke .2s ease; }
+  .svc-card.wide{ grid-column:span 2; aspect-ratio:auto; }
+  .svc-card.wide .content{ padding:30px; }
+  .svc-card.wide h3{ font-size:24px; }
+
+  /* about split */
+
+  /* about */
+
+  /* reviews — featured quote stage + reviewer rail with autoplay progress */
+  .reviews-section{ padding:96px 0; border-bottom:1px solid var(--line); }
+  .rv-layout{ display:grid; grid-template-columns:0.8fr 1.2fr; gap:56px; align-items:stretch; }
+  .rv-side h2{ font-size:clamp(26px,3vw,36px); margin-bottom:30px; max-width:420px; }
+  .rv-list{ display:flex; flex-direction:column; gap:6px; }
+  .rv-item{ appearance:none; background:none; border:0; font:inherit; color:inherit; text-align:left; cursor:pointer; position:relative; display:flex; align-items:center; gap:14px; padding:14px 16px; border-radius:14px; overflow:hidden; transition:background .25s ease; }
+  .rv-item:hover{ background:#F7F9FC; }
+  .rv-item.active{ background:#EEF3FB; }
+  .rv-av{ width:40px; height:40px; border-radius:50%; background:#fff; border:1px solid var(--line); color:var(--brand); display:flex; align-items:center; justify-content:center; font-family:var(--display); font-weight:600; font-size:13px; flex-shrink:0; transition:background .25s ease, color .25s ease, border-color .25s ease; }
+  .rv-item.active .rv-av{ background:var(--brand); color:#fff; border-color:var(--brand); }
+  .rv-meta b{ display:block; font-size:14.5px; font-weight:600; }
+  .rv-meta i{ font-style:normal; font-size:12.5px; color:var(--muted); }
+  .rv-bar{ position:absolute; left:0; bottom:0; width:100%; height:2px; }
+  .rv-bar span{ display:block; height:100%; background:var(--brand); transform:scaleX(0); transform-origin:left; }
+
+  .rv-stage{ position:relative; background:#EEF3FB; border-radius:26px; padding:56px 52px 38px; overflow:hidden; min-height:440px; display:flex; flex-direction:column; justify-content:space-between; }
+  .rv-mark{ position:absolute; top:6px; left:34px; font-family:var(--display); font-size:210px; line-height:1; color:var(--brand); opacity:0.09; pointer-events:none; user-select:none; }
+  .rv-ring{ position:absolute; border-radius:50%; border:1px solid rgba(22,48,94,0.16); pointer-events:none; }
+  .rv-ring.a{ width:260px; height:260px; right:-80px; bottom:-90px; }
+  .rv-ring.b{ width:140px; height:140px; right:60px; bottom:-40px; }
+  .rv-slides{ display:grid; position:relative; z-index:2; margin-top:30px; }
+  .rv-slide{ grid-area:1/1; visibility:hidden; }
+  .rv-slide.active{ visibility:visible; }
+  .rv-q{ font-family:var(--display); font-size:clamp(21px,2.3vw,30px); line-height:1.38; font-weight:500; letter-spacing:-0.01em; color:var(--ink); }
+  .rv-q .w{ display:inline-block; overflow:hidden; vertical-align:top; padding-bottom:.14em; margin-bottom:-.14em; }
+  .rv-q .w > span{ display:inline-block; }
+  .rv-by{ margin-top:26px; font-size:14px; color:var(--muted); }
+  .rv-by b{ color:var(--ink); font-weight:600; }
+  .rv-foot{ position:relative; z-index:2; display:flex; align-items:center; justify-content:space-between; margin-top:34px; }
+  .rv-count{ font-family:var(--display); font-weight:600; color:var(--brand); font-size:14px; display:flex; align-items:baseline; gap:6px; }
+  .rv-count .rv-cur{ font-size:30px; }
+  .rv-arrows{ display:flex; gap:10px; }
+  .rv-arrow{ width:44px; height:44px; border-radius:50%; border:1px solid rgba(22,48,94,0.2); background:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:border-color .2s ease, background .2s ease, transform .15s ease; }
+  .rv-arrow:hover{ border-color:var(--brand); background:var(--brand); transform:translateY(-2px); }
+  .rv-arrow svg{ width:16px; height:16px; stroke:var(--ink); transition:stroke .2s ease; }
+  .rv-arrow:hover svg{ stroke:#fff; }
+  @media (max-width:900px){
+    .rv-layout{ grid-template-columns:minmax(0,1fr); gap:30px; }
+    .rv-side, .rv-stage{ min-width:0; }
+    .rv-list{ flex-direction:row; overflow-x:auto; scrollbar-width:none; gap:8px; padding-bottom:4px; }
+    .rv-list::-webkit-scrollbar{ display:none; }
+    .rv-item{ flex:0 0 auto; min-width:210px; border:1px solid var(--line); }
+    .rv-stage{ padding:44px 26px 28px; min-height:0; }
+    .rv-mark{ font-size:140px; }
+  }
+
+  /* app cta — feature showcase with floating cards around the phone */
+  #app{ position:relative; padding:96px 0; overflow:hidden; background:#F7F9FC; }
+  #app .bg-ring{ position:absolute; border-radius:50%; border:1px solid rgba(22,48,94,0.1); pointer-events:none; }
+  #app .bgr1{ width:340px; height:340px; top:-120px; left:-100px; }
+  #app .bgr2{ width:180px; height:180px; bottom:-60px; left:12%; background:rgba(22,48,94,0.05); border:none; }
+  .app-cta{ display:flex; justify-content:space-between; align-items:center; gap:56px; flex-wrap:wrap; position:relative; z-index:2; }
+  .app-cta h2{ font-size:clamp(26px,3vw,34px); margin-bottom:10px; }
+  .app-cta p{ color:var(--muted); max-width:380px; }
+  .app-cta .stores{ display:flex; gap:12px; flex-shrink:0; }
+
+  .phone-showcase{ position:relative; width:460px; max-width:100%; min-height:520px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .phone-frame{ position:relative; width:220px; aspect-ratio:9/19; background:#0B0C10; border-radius:38px; padding:10px; flex-shrink:0; box-shadow:0 30px 60px -20px rgba(11,30,54,0.35); z-index:2; }
+  .phone-frame::before{ content:""; position:absolute; top:20px; left:50%; transform:translateX(-50%); width:70px; height:20px; background:#0B0C10; border-radius:12px; z-index:2; }
+  .phone-frame .screen{ width:100%; height:100%; border-radius:28px; overflow:hidden; background:#fff; }
+  .phone-frame .screen img{ width:100%; height:100%; object-fit:cover; object-position:top; }
+
+  .app-feature-card{ position:absolute; width:186px; background:#fff; border-radius:12px; padding:16px 16px; z-index:3; }
+  .app-feature-card .afc-icon{ width:32px; height:32px; border-radius:9px; display:flex; align-items:center; justify-content:center; margin-bottom:10px; }
+  .app-feature-card .afc-icon svg{ width:16px; height:16px; stroke:#fff; }
+  .app-feature-card h4{ font-family:var(--display); font-size:13.5px; font-weight:600; margin-bottom:4px; }
+  .app-feature-card p{ font-size:12px; color:var(--muted); line-height:1.4; }
+  .afc-1{ top:0; left:-10px; background:#EEF3FB; }
+  .afc-1 .afc-icon{ background:#16305E; }
+  .afc-2{ top:36%; right:-24px; background:#FFF3E8; }
+  .afc-2 .afc-icon{ background:#C2703D; }
+  .afc-3{ bottom:6%; left:-4px; background:#EAF7EF; }
+  .afc-3 .afc-icon{ background:#2C7A4B; }
+
+  @media (max-width:1100px){
+    .phone-showcase{ width:400px; min-height:480px; }
+    .app-feature-card{ width:160px; }
+    .afc-2{ right:-36px; }
+  }
+  @media (max-width:900px){
+    .phone-showcase{ margin:0 auto; }
+    .app-feature-card{ position:static; width:100%; margin-bottom:12px; }
+    .phone-showcase{ display:grid; grid-template-columns:1fr; gap:0; min-height:0; }
+    .phone-showcase .phone-frame{ order:-1; margin:0 auto 24px; }
+  }
+
+  /* contact */
+  .contact-grid{ display:grid; grid-template-columns:1fr 1fr; gap:64px; }
+  .field{ margin-bottom:16px; }
+  .field label{ display:block; font-size:12.5px; color:var(--muted); margin-bottom:6px; }
+  .field input, .field textarea{ width:100%; padding:12px 14px; border-radius:6px; border:1px solid var(--line); font-family:var(--body); font-size:14.5px; color:var(--ink); transition:border-color .15s ease; }
+  .field textarea{ min-height:110px; resize:vertical; }
+  .field input:focus, .field textarea:focus{ outline:none; border-color:var(--brand); }
+  .office{ padding:22px 0; border-top:1px solid var(--line); }
+  .office:last-of-type{ border-bottom:1px solid var(--line); }
+  .office .tag{ font-size:11.5px; color:var(--brand); font-weight:600; letter-spacing:0.05em; text-transform:uppercase; }
+  .office h4{ font-size:16px; margin:8px 0 4px; font-family:var(--display); font-weight:600; }
+  .office p{ color:var(--muted); font-size:14px; }
+  .office a{ color:var(--ink); font-weight:600; }
+
+  footer{ padding:56px 0 32px; }
+  .footer-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px; margin-bottom:48px; }
+  .footer-grid h5{ font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:16px; }
+  .footer-grid ul{ list-style:none; }
+  .footer-grid li{ margin-bottom:10px; font-size:14.5px; }
+  .footer-grid a:hover{ color:var(--brand); }
+  .footer-bottom{ display:flex; justify-content:space-between; padding-top:28px; border-top:1px solid var(--line); font-size:13px; color:var(--muted); flex-wrap:wrap; gap:12px; }
+  .socials{ display:flex; gap:14px; }
+  .socials a{ width:30px; height:30px; border-radius:50%; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:12px; transition:border-color .15s ease, transform .15s ease; }
+  .socials a:hover{ border-color:var(--ink); transform:translateY(-2px); }
+
+  /* .reveal starts visible by default; JS hides+animates it only once GSAP
+     successfully initializes, so content is never stuck invisible if a
+     script/CDN fails. See the try/catch guard in the script below. */
+
+  /* custom cursor */
+  .ela-cursor-dot, .ela-cursor-ring{ position:fixed; top:0; left:0; pointer-events:none; z-index:999; border-radius:50%; transform:translate(-100px,-100px); }
+  .ela-cursor-dot{ width:6px; height:6px; background:var(--ink); margin:-3px 0 0 -3px; }
+  .ela-cursor-ring{ width:34px; height:34px; margin:-17px 0 0 -17px; border:1px solid var(--ink); transition:width .25s ease, height .25s ease, margin .25s ease, border-color .25s ease, background .25s ease; display:flex; align-items:center; justify-content:center; }
+  .ela-cursor-ring.hover{ width:56px; height:56px; margin:-28px 0 0 -28px; background:var(--ink); }
+  .ela-cursor-ring.down{ width:26px; height:26px; margin:-13px 0 0 -13px; }
+  .ela-cursor-label{ font-family:var(--display); font-size:11px; font-weight:600; color:#fff; opacity:0; transition:opacity .2s ease; text-transform:uppercase; letter-spacing:0.04em; }
+  .ela-cursor-ring.has-label .ela-cursor-label{ opacity:1; }
+  @media (pointer: coarse){ .ela-cursor-dot, .ela-cursor-ring{ display:none; } }
+  html.ela-cursor-active, html.ela-cursor-active *{ cursor:none !important; }
+
+  @media (max-width:980px){
+    .bento{ grid-template-columns:1fr 1fr; }
+    .bt-wide .bt-copy{ max-width:56%; }
+    .contact-grid{ grid-template-columns:1fr; }
+    .image-band .msg{ font-size:18px; }
+    .svc-grid{ grid-template-columns:1fr 1fr; }
+    .svc-card.wide{ grid-column:span 2; }
+  }
+  @media (max-width:720px){
+    nav ul{ display:none; }
+    .bento{ grid-template-columns:1fr; }
+    .bt-wide{ grid-column:span 1; }
+    .bt-wide .bt-copy{ max-width:none; }
+    .bt-route{ position:static; width:100%; margin-top:4px; }
+    .bt-radar{ position:relative; right:auto; top:auto; transform:none; margin:6px auto 0; }
+    .bt-bars{ position:static; height:100px; margin-top:4px; }
+    .footer-grid{ grid-template-columns:1fr 1fr; }
+    .wrap{ padding:0 20px; }
+    .image-band{ height:220px; }
+    .svc-grid{ grid-template-columns:1fr; gap:18px; }
+    .svc-card.wide{ grid-column:span 1; }
+  }
+  @media (max-width:520px){ .nav-actions{ gap:8px; } .nav-actions .btn{ white-space:nowrap; padding:10px 13px; font-size:13px; } }
+  .btn .short{ display:none; }
+  @media (max-width:980px){ .nav-actions .long{ display:none; } .nav-actions .short{ display:inline; } }
+</style>
+</head>
+<body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<div class="progress-rail" aria-hidden="true">
+  <span class="pr-label">PICKUP</span>
+  <div class="pr-track"><div class="pr-marker"></div></div>
+  <span class="pr-label">DELIVERED</span>
+</div>
+
+<div id="pageContent">
+<header id="header">
+  <div class="wrap nav">
+    <a href="#" class="logo"><img src="ela-logo-mark.png" alt="ELA - Enviable Logistics"></a>
+    <nav><ul>
+      <li><a href="about.html">About</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="team.html">Team</a></li>
+      <li><a href="careers.html">Careers</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul></nav>
+    <div class="nav-actions">
+      <a href="#contact" class="btn btn-ghost"><span class="long">Business partner account</span><span class="short">Partner account</span></a>
+      <a href="#app" class="btn btn-primary">Download app</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-inner">
+      <h1>Powering the movement of business across Africa.</h1>
+      <p class="lede">Freight, courier, last-mile, and interstate passenger movement, run on one platform, one network, and one standard, across Nigeria and beyond.</p>
+    </div>
+    <div id="bookingWidget"></div>
+  </div>
+</section>
+
+<div class="trusted-by">
+  <div class="wrap reveal">
+    <p class="tb-label">Trusted by businesses across Nigeria</p>
+    <div class="tb-track-wrap">
+      <div class="tb-track">
+        <img class="tb-logo" src="logo-honeywell.png" alt="Honeywell Flour Mills">
+        <img class="tb-logo" src="logo-cway.png" alt="Cway">
+        <img class="tb-logo" src="logo-firewood.png" alt="Firewood Jollof">
+        <img class="tb-logo" src="logo-fmn.png" alt="Flour Mills of Nigeria">
+        <img class="tb-logo" src="logo-sendfreight.png" alt="Send Freight">
+        <img class="tb-logo" src="logo-enviable-tricycle.png" alt="Enviable Tricycle Auto Parts Ltd">
+        <img class="tb-logo" src="logo-honeywell.png" alt="" aria-hidden="true">
+        <img class="tb-logo" src="logo-cway.png" alt="" aria-hidden="true">
+        <img class="tb-logo" src="logo-firewood.png" alt="" aria-hidden="true">
+        <img class="tb-logo" src="logo-fmn.png" alt="" aria-hidden="true">
+        <img class="tb-logo" src="logo-sendfreight.png" alt="" aria-hidden="true">
+        <img class="tb-logo" src="logo-enviable-tricycle.png" alt="" aria-hidden="true">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="image-band">
+  <img src="https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&w=1600&q=80" alt="Warehouse shelving stacked with parcels">
+  <div class="overlay">
+    <div class="msg">Give us your goods.<span>Every parcel scanned in, tracked, and handed off with a record — from depot to doorstep.</span></div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">Why ELA</p>
+      <h2>Built to move, designed to scale</h2>
+    </div>
+    <div class="bento">
+      <div class="bt bt-wide dark">
+        <div class="bt-head"><span class="bt-num">01</span><span class="bt-live"><i></i>Live</span></div>
+        <div class="bt-copy">
+          <h3>Tech-driven logistics</h3>
+          <p>Real-time tracking and route data behind every booking.</p>
+        </div>
+        <svg class="bt-route" viewBox="0 0 420 110" fill="none" aria-hidden="true">
+          <path class="r-base" pathLength="100" d="M10 90 C 90 20, 170 110, 250 55 S 370 25, 410 35"/>
+          <path class="r-live" pathLength="100" d="M10 90 C 90 20, 170 110, 250 55 S 370 25, 410 35"/>
+          <circle cx="10" cy="90" r="4"/><circle cx="410" cy="35" r="4"/>
+          <circle class="r-dot" r="5"><animateMotion dur="3.4s" repeatCount="indefinite" path="M10 90 C 90 20, 170 110, 250 55 S 370 25, 410 35"/></circle>
+        </svg>
+      </div>
+
+      <div class="bt">
+        <div class="bt-head"><span class="bt-num">02</span></div>
+        <div class="bt-statrow"><div class="bt-stat">0<small>g</small></div><div class="bt-batt" aria-hidden="true"></div></div>
+        <div class="bt-copy">
+          <h3>Sustainable delivery</h3>
+          <p>EV bikes for last-mile parcels, cutting emissions on our busiest routes.</p>
+        </div>
+      </div>
+
+      <div class="bt">
+        <div class="bt-head"><span class="bt-num">03</span></div>
+        <div class="bt-chips" aria-hidden="true"><span>E-bike</span><span>Van</span><span>Bus</span><span>Truck</span><span>40ft container</span></div>
+        <div class="bt-copy">
+          <h3>Expansive fleet</h3>
+          <p>From a single envelope to a 40ft container — the right vehicle, every time.</p>
+        </div>
+      </div>
+
+      <div class="bt bt-wide">
+        <div class="bt-head"><span class="bt-num">04</span></div>
+        <div class="bt-copy">
+          <h3>Borderless reach</h3>
+          <p>Domestic routes and cross-border freight on the same platform.</p>
+        </div>
+        <div class="bt-radar" aria-hidden="true">
+          <span class="ring r1"></span><span class="ring r2"></span><span class="ring r3"></span>
+          <span class="pulse"></span><span class="pulse p2"></span>
+          <span class="orbit"><i></i></span><span class="orbit o2"><i></i></span>
+          <span class="core"></span>
+        </div>
+      </div>
+
+      <div class="bt bt-wide">
+        <div class="bt-head"><span class="bt-num">05</span></div>
+        <div class="bt-copy">
+          <h3>Business-focused</h3>
+          <p>Fleet leasing and dedicated transport built around your volumes.</p>
+        </div>
+        <div class="bt-bars" aria-hidden="true">
+          <i style="height:38%;opacity:.28"></i><i style="height:52%;opacity:.4"></i><i style="height:46%;opacity:.55"></i><i style="height:72%;opacity:.7"></i><i style="height:64%;opacity:.85"></i><i style="height:94%"></i>
+        </div>
+      </div>
+
+      <div class="bt">
+        <div class="bt-head"><span class="bt-num">06</span></div>
+        <div class="bt-chat" aria-hidden="true"><span class="bub a"></span><span class="bub b"><i></i><i></i><i></i></span></div>
+        <div class="bt-copy">
+          <h3>Direct support</h3>
+          <p>Business accounts get a direct line to our operations desk.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="wrap">
+    <div class="section-head service-head reveal">
+      <div>
+        <p class="eyebrow">What we move</p>
+        <h2>Five services, one platform</h2>
+      </div>
+      <a href="services.html" class="btn btn-ghost head-extra">View all services →</a>
+    </div>
+    <div class="svc-grid">
+      <a href="service-detail.html?id=ela-haul" class="svc-card wide reveal" data-cursor="View">
+        <img src="service-ela-haul.jpg" alt="ELA Haul freight truck">
+        <div class="overlay"></div>
+        <div class="content">
+          <span class="product-tag">ELA HAUL</span>
+          <h3>Freight &amp; cargo transport</h3>
+          <p>Regional and long-haul truck freight, palletized or bulk.</p>
+          <span class="arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke-width="1.6" stroke-linecap="round"><path d="M3 11L11 3M11 3H4M11 3V10"/></svg></span>
+        </div>
+      </a>
+      <a href="service-detail.html?id=ela-click" class="svc-card reveal" data-cursor="View">
+        <img src="service-ela-click.jpg" alt="ELA Click rider on a motorbike">
+        <div class="overlay"></div>
+        <div class="content">
+          <span class="product-tag">ELA CLICK <span style="opacity:.8; font-weight:500;">+ Errand</span></span>
+          <h3>Last-mile parcels</h3>
+          <p>EV bikes for fast city-wide delivery.</p>
+          <span class="arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke-width="1.6" stroke-linecap="round"><path d="M3 11L11 3M11 3H4M11 3V10"/></svg></span>
+        </div>
+      </a>
+      <a href="service-detail.html?id=ela-transport" class="svc-card reveal" data-cursor="View">
+        <img class="veh" style="object-position:52% 62%" src="service-ela-transport.jpg" alt="ELA Transport interstate van">
+        <div class="overlay"></div>
+        <div class="content">
+          <span class="product-tag">ELA TRANSPORT</span>
+          <h3>Interstate passenger travel</h3>
+          <p>Terminal-to-terminal travel, nationwide.</p>
+          <span class="arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke-width="1.6" stroke-linecap="round"><path d="M3 11L11 3M11 3H4M11 3V10"/></svg></span>
+        </div>
+      </a>
+      <a href="service-detail.html?id=ela-go" class="svc-card reveal" data-cursor="View">
+        <img class="veh" style="object-position:56% 55%" src="service-ela-go.jpg" alt="ELA Go delivery van">
+        <div class="overlay"></div>
+        <div class="content">
+          <span class="product-tag">ELA GO</span>
+          <h3>Nationwide courier</h3>
+          <p>Door-to-door parcels, tracked end to end.</p>
+          <span class="arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke-width="1.6" stroke-linecap="round"><path d="M3 11L11 3M11 3H4M11 3V10"/></svg></span>
+        </div>
+      </a>
+      <a href="service-detail.html?id=ela-express" class="svc-card reveal" data-cursor="View">
+        <img class="veh" style="object-position:80% 40%" src="service-ela-express.jpg" alt="ELA Express courier with a parcel">
+        <div class="overlay"></div>
+        <div class="content">
+          <span class="product-tag">ELA EXPRESS</span>
+          <h3>Priority express</h3>
+          <p>Urgent parcels, guaranteed window.</p>
+          <span class="arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke-width="1.6" stroke-linecap="round"><path d="M3 11L11 3M11 3H4M11 3V10"/></svg></span>
+        </div>
+      </a>
+    </div>
+    <div class="reveal" style="margin-top:32px;">
+      <a href="services.html" class="btn btn-primary">See all 5 services →</a>
+    </div>
+  </div>
+</section>
+
+<section class="reviews-section" id="reviews">
+  <div class="wrap">
+    <div class="rv-layout">
+      <div class="rv-side">
+        <p class="eyebrow">What people say</p>
+        <h2>Loved by businesses and individuals.</h2>
+        <div class="rv-list" role="tablist" aria-label="Reviewers">
+          <button class="rv-item active" role="tab" aria-selected="true" data-i="0">
+            <span class="rv-av">OC</span>
+            <span class="rv-meta"><b>Oti Chimezirim</b><i>Business owner, Lagos</i></span>
+            <span class="rv-bar"><span></span></span>
+          </button>
+          <button class="rv-item" role="tab" aria-selected="false" data-i="1">
+            <span class="rv-av">IO</span>
+            <span class="rv-meta"><b>Ifeoma Okorie</b><i>Retailer, Lagos</i></span>
+            <span class="rv-bar"><span></span></span>
+          </button>
+          <button class="rv-item" role="tab" aria-selected="false" data-i="2">
+            <span class="rv-av">EO</span>
+            <span class="rv-meta"><b>Emmanuel Okapla</b><i>Operations lead</i></span>
+            <span class="rv-bar"><span></span></span>
+          </button>
+          <button class="rv-item" role="tab" aria-selected="false" data-i="3">
+            <span class="rv-av">AB</span>
+            <span class="rv-meta"><b>Amaka Bello</b><i>ELA CLICK customer</i></span>
+            <span class="rv-bar"><span></span></span>
+          </button>
+          <button class="rv-item" role="tab" aria-selected="false" data-i="4">
+            <span class="rv-av">SA</span>
+            <span class="rv-meta"><b>Segun Adeyemi</b><i>ELA Errand customer</i></span>
+            <span class="rv-bar"><span></span></span>
+          </button>
+          <button class="rv-item" role="tab" aria-selected="false" data-i="5">
+            <span class="rv-av">DU</span>
+            <span class="rv-meta"><b>David Umeh</b><i>Logistics manager</i></span>
+            <span class="rv-bar"><span></span></span>
+          </button>
+        </div>
+      </div>
+      <div class="rv-stage">
+        <span class="rv-mark" aria-hidden="true">&ldquo;</span>
+        <span class="rv-ring a"></span><span class="rv-ring b"></span>
+        <div class="rv-slides" aria-live="polite">
+            <div class="rv-slide active">
+              <p class="rv-q">"ELA CLICK has cut our delivery complaints to almost zero. Riders are fast, and my customers can actually track their parcel in real time."</p>
+              <p class="rv-by"><b>Oti Chimezirim</b> · Business owner, Lagos</p>
+            </div>
+            <div class="rv-slide">
+              <p class="rv-q">"We moved our warehouse stock with ELA HAUL and it was the smoothest freight experience we've had — clear pricing, no surprises."</p>
+              <p class="rv-by"><b>Ifeoma Okorie</b> · Retailer, Lagos</p>
+            </div>
+            <div class="rv-slide">
+              <p class="rv-q">"Same-day pickup, every time. ELA GO has made sending parcels between our branches genuinely stress-free."</p>
+              <p class="rv-by"><b>Emmanuel Okapla</b> · Operations lead</p>
+            </div>
+            <div class="rv-slide">
+              <p class="rv-q">"Support actually picks up. Every time I've had a question about a delivery, someone's answered within minutes."</p>
+              <p class="rv-by"><b>Amaka Bello</b> · ELA CLICK customer</p>
+            </div>
+            <div class="rv-slide">
+              <p class="rv-q">"I run errands through the app weekly — groceries arrive exactly as ordered, and the rider updates are a nice touch."</p>
+              <p class="rv-by"><b>Segun Adeyemi</b> · ELA Errand customer</p>
+            </div>
+            <div class="rv-slide">
+              <p class="rv-q">"Switched our freight over to ELA HAUL this year — the live tracking alone has saved us so many follow-up calls."</p>
+              <p class="rv-by"><b>David Umeh</b> · Logistics manager</p>
+            </div>
+        </div>
+        <div class="rv-foot">
+          <div class="rv-count"><span class="rv-cur">01</span><span>/ 06</span></div>
+          <div class="rv-arrows">
+            <button class="rv-arrow" id="rvPrev" aria-label="Previous review"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+            <button class="rv-arrow" id="rvNext" aria-label="Next review"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="app">
+  <div class="bg-ring bgr1"></div>
+  <div class="bg-ring bgr2"></div>
+  <div class="wrap app-cta reveal">
+    <div>
+      <p class="eyebrow">Download ELA</p>
+      <h2>Track it from pickup to porch.</h2>
+      <p>Book, manage and track deliveries and quick errands in real time — right from your phone.</p>
+      <div class="stores" style="margin-top:22px;">
+        <a href="elacustomer://auth/home" class="btn btn-primary">Get it on Google Play</a>
+        <a href="elacustomer://auth/home" class="btn btn-ghost">Get it on App Store</a>
+      </div>
+    </div>
+    <div class="phone-showcase">
+      <div class="app-feature-card afc-1">
+        <div class="afc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="18" r="2.5"/><circle cx="16" cy="18" r="2.5"/><path d="M4 18l1-9h6l3 5h4"/></svg></div>
+        <h4>Book a rider</h4>
+        <p>Send an item and a rider's on the way in minutes.</p>
+      </div>
+      <div class="app-feature-card afc-2">
+        <div class="afc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16V7a1 1 0 011-1h9v10"/><path d="M13 10h4l3 3.5V16h-7z"/><circle cx="7" cy="18" r="1.8"/><circle cx="17.5" cy="18" r="1.8"/></svg></div>
+        <h4>Order a van</h4>
+        <p>Move bulk goods with ELA GO, right from the app.</p>
+      </div>
+      <div class="app-feature-card afc-3">
+        <div class="afc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linejoin="round"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 016 0v2" stroke-linecap="round"/></svg></div>
+        <h4>Get groceries delivered</h4>
+        <p>Errands and quick runs, tracked live to your door.</p>
+      </div>
+      <div class="phone-frame">
+        <div class="screen"><img src="app-screenshot.png" alt="ELA app home screen showing quick actions and services"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap contact-grid">
+    <div class="reveal">
+      <p class="eyebrow">Get in touch</p>
+      <h2 style="margin-bottom:24px; font-size:28px;">Talk to the team</h2>
+      <div class="field"><label>Full name</label><input type="text" placeholder="Your name"></div>
+      <div class="field"><label>Email address</label><input type="email" placeholder="you@company.com"></div>
+      <div class="field"><label>Phone number</label><input type="text" placeholder="+234"></div>
+      <div class="field"><label>Message</label><textarea placeholder="Tell us what you need moved"></textarea></div>
+      <button class="btn btn-primary">Submit message</button>
+    </div>
+    <div class="reveal">
+      <div class="office">
+        <span class="tag">Group head office — Lagos</span>
+        <h4>No. 52 Saka Tinubu</h4>
+        <p>Victoria Island, Lagos State</p>
+        <p style="margin-top:12px;"><a href="tel:+2348038802353">+234 (80) 3880 2353</a> · <a href="tel:+2348030759443">+234 (80) 3075 9443</a></p>
+      </div>
+      <div class="office">
+        <span class="tag">Ikorodu branch</span>
+        <h4>No. 54 Ikorodu–Shagamu Road</h4>
+        <p>Opposite NIPCO Filling Station, after Sabo, Ikorodu, Lagos</p>
+      </div>
+      <a href="offices.html" class="btn btn-ghost" style="margin-top:20px;">View all office addresses →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <a href="#" class="logo" style="margin-bottom:14px;"><img src="ela-logo-mark.png" alt="ELA - Enviable Logistics" style="height:28px;"></a>
+        <p style="color:var(--muted); font-size:14px; max-width:260px;">Enviable Logistics Ltd — moving Lagos, Nigeria, and beyond, one tracked route at a time.</p>
+      </div>
+      <div><h5>Company</h5><ul><li><a href="about.html">About us</a></li><li><a href="services.html">Services</a></li><li><a href="team.html">Team</a></li><li><a href="careers.html">Careers</a></li><li><a href="#contact">Contact us</a></li></ul></div>
+      <div><h5>Help &amp; support</h5><ul><li><a href="offices.html">Our offices</a></li><li><a href="book.html?tab=track">Track a shipment</a></li><li><a href="book.html?tab=manage">Manage booking</a></li><li><a href="tel:+2348038802353">Call us</a></li><li><a href="#contact">Email us</a></li></ul></div>
+      <div>
+        <h5>Follow</h5>
+        <div class="socials">
+          <a href="#" aria-label="X">X</a>
+          <a href="https://www.instagram.com/enviablelogistics/" aria-label="Instagram">IG</a>
+          <a href="#" aria-label="Facebook">FB</a>
+          <a href="#" aria-label="YouTube">YT</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Enviable Logistics Ltd.</span>
+      <span style="display:flex; gap:18px;"><a href="#">Terms of Service</a><a href="#">Privacy &amp; Policy</a><a href="#">Account deletion</a></span>
+    </div>
+  </div>
+</footer>
+
+</div><!-- /#pageContent -->
+
+<script>
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', ()=>{
+    header.classList.toggle('scrolled', window.scrollY > 8);
+  }, {passive:true});
+
+  // ---- REVIEWS: featured quote stage. Words rise in per quote, the active reviewer shows an
+  // autoplay progress bar, hover pauses, and it only runs while the section is on screen ----
+  (function(){
+    const section = document.getElementById('reviews');
+    if(!section) return;
+    const items = Array.from(section.querySelectorAll('.rv-item'));
+    const slides = Array.from(section.querySelectorAll('.rv-slide'));
+    const bars = items.map(it => it.querySelector('.rv-bar span'));
+    const curEl = section.querySelector('.rv-cur');
+    const mark = section.querySelector('.rv-mark');
+    const total = slides.length;
+    const esc = t => t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const canAnimate = () => typeof gsap !== 'undefined' && !reduceMotion;
+
+    // split each quote into masked words so they can rise in one by one
+    slides.forEach(sl=>{
+      const q = sl.querySelector('.rv-q');
+      const text = q.textContent.trim();
+      q.setAttribute('aria-label', text);
+      q.innerHTML = text.split(/\s+/).map(w => '<span class="w"><span>' + esc(w) + '</span></span>').join(' ');
+    });
+    const wordsOf = sl => sl.querySelectorAll('.rv-q .w > span');
+
+    let idx = 0, tl = null, prog = null, hovering = false, visible = false, started = false;
+
+    function setActive(i){
+      items.forEach((it,k)=>{ it.classList.toggle('active', k===i); it.setAttribute('aria-selected', k===i ? 'true':'false'); });
+      curEl.textContent = String(i+1).padStart(2,'0');
+    }
+
+    function startProgress(i){
+      if(prog) prog.kill();
+      if(!canAnimate()) return;
+      gsap.set(bars, {scaleX:0});
+      prog = gsap.fromTo(bars[i], {scaleX:0}, {scaleX:1, duration:6.5, ease:'none', onComplete:()=> show((idx+1)%total)});
+      if(hovering || !visible) prog.pause();
+    }
+
+    function show(i, first){
+      if(tl) tl.kill();
+      const prev = slides[idx], next = slides[i];
+      const swap = ()=>{ prev.classList.remove('active'); next.classList.add('active'); idx = i; setActive(i); };
+      if(!canAnimate()){ swap(); return; }
+      tl = gsap.timeline();
+      if(!first && prev !== next){
+        tl.to(wordsOf(prev), {yPercent:-110, duration:.28, stagger:.006, ease:'power2.in'})
+          .to(prev.querySelector('.rv-by'), {opacity:0, duration:.2}, 0);
+      }
+      tl.add(()=>{
+        swap();
+        gsap.set(wordsOf(prev), {yPercent:0});
+        gsap.set(prev.querySelector('.rv-by'), {opacity:1});
+        gsap.set(wordsOf(next), {yPercent:110});
+        gsap.set(next.querySelector('.rv-by'), {opacity:0, y:8});
+        gsap.fromTo(mark, {rotate:-10, scale:.88}, {rotate:0, scale:1, duration:.9, ease:'back.out(2)'});
+      })
+      .to(wordsOf(next), {yPercent:0, duration:.7, stagger:.016, ease:'power3.out'})
+      .to(next.querySelector('.rv-by'), {opacity:1, y:0, duration:.45, ease:'power2.out'}, '-=.4');
+      startProgress(i);
+    }
+
+    items.forEach((it,i)=> it.addEventListener('click', ()=>{ if(i !== idx) show(i); }));
+    section.querySelector('#rvNext').addEventListener('click', ()=> show((idx+1)%total));
+    section.querySelector('#rvPrev').addEventListener('click', ()=> show((idx-1+total)%total));
+
+    // pause autoplay while the pointer is over the reviews
+    ['.rv-stage','.rv-list'].forEach(sel=>{
+      const el = section.querySelector(sel);
+      el.addEventListener('mouseenter', ()=>{ hovering = true; if(prog) prog.pause(); });
+      el.addEventListener('mouseleave', ()=>{ hovering = false; if(prog && visible) prog.play(); });
+    });
+
+    // start (and pause/resume) based on whether the section is on screen
+    if('IntersectionObserver' in window){
+      new IntersectionObserver(entries=>{
+        visible = entries[0].isIntersecting;
+        if(visible && !started){ started = true; show(0, true); }
+        else if(prog){ visible && !hovering ? prog.play() : prog.pause(); }
+      }, {threshold:0.35}).observe(section);
+    } else {
+      visible = true; started = true; show(0, true);
+    }
+  })();
+
+  // soft cursor-follow glow on the Why ELA cards
+  document.querySelectorAll('.bt').forEach(card=>{
+    card.addEventListener('mousemove', e=>{
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+  });
+
+  function showEverything(){
+    document.querySelectorAll('.reveal').forEach(el=> el.style.opacity = 1);
+  }
+
+  if(typeof gsap === 'undefined'){
+    // CDN failed to load — fail open, just show everything
+    showEverything();
+  } else if(reduceMotion){
+    gsap.set('.reveal', {opacity:1});
+  } else {
+    try {
+      gsap.registerPlugin(ScrollTrigger);
+
+      // split hero h1 into word-masked spans for a line-by-line reveal
+      const heroH1 = document.querySelector('.hero h1');
+      if(heroH1){
+        const words = heroH1.textContent.trim().split(' ');
+        heroH1.innerHTML = words.map(w => `<span class="word-mask"><span class="word">${w}</span></span>`).join(' ');
+      }
+
+      // ---- HERO ENTRANCE (on load, not scroll-triggered) ----
+      const heroTl = gsap.timeline({defaults:{ease:'power3.out'}});
+      heroTl
+        .from('.hero h1 .word', {yPercent:120, opacity:0, duration:.8, stagger:.06})
+        .from('.hero .lede', {opacity:0, y:16, duration:.55}, '-=.4');
+
+      // ---- GENERIC SECTION HEADS: text + fade on scroll ----
+      gsap.utils.toArray('.section-head').forEach(head=>{
+        const eyebrow = head.querySelector('.eyebrow');
+        const h2 = head.querySelector('h2');
+        const rest = head.querySelectorAll(':scope > .head-extra');
+        const tl = gsap.timeline({scrollTrigger:{trigger:head, start:'top 82%'}});
+        if(eyebrow) tl.from(eyebrow, {opacity:0, y:10, duration:.4});
+        if(h2) tl.from(h2, {opacity:0, y:22, duration:.6, ease:'power3.out'}, '-=.2');
+        if(rest.length) tl.from(rest, {opacity:0, y:14, duration:.4, stagger:.06}, '-=.3');
+      });
+
+      // ---- STANDALONE .reveal blocks not otherwise handled ----
+      gsap.utils.toArray('.reveal').forEach(el=>{
+        if(el.classList.contains('section-head')) return;
+        if(el.closest('.hero')) return; // handled by heroTl above
+        if(el.classList.contains('about-media')) return; // handled separately
+        if(el.classList.contains('svc-card')) return; // handled separately
+        if(el.classList.contains('app-cta')) return; // handled separately
+        gsap.fromTo(el, {opacity:0, y:18}, {
+          opacity:1, y:0, duration:.7, ease:'power3.out', clearProps:'transform',
+          scrollTrigger:{trigger:el, start:'top 97%'}
+        });
+      });
+
+      // ---- APP SHOWCASE: copy rises in, phone scales/rotates in, feature cards fly in from their
+      // corners, then the phone gets a continuous gentle float ----
+      gsap.timeline({scrollTrigger:{trigger:'#app', start:'top 75%'}})
+        .from('.app-cta > div:first-child > *', {opacity:0, y:20, duration:.55, stagger:.08, ease:'power3.out'})
+        .from('.phone-frame', {opacity:0, scale:.8, rotation:-6, duration:.7, ease:'back.out(1.6)'}, '-=.35')
+        .from('.afc-1', {opacity:0, x:-40, y:-20, duration:.55, ease:'power3.out'}, '-=.3')
+        .from('.afc-2', {opacity:0, x:40, duration:.55, ease:'power3.out'}, '-=.4')
+        .from('.afc-3', {opacity:0, x:-30, y:20, duration:.55, ease:'power3.out'}, '-=.4')
+        .add(()=>{
+          gsap.to('.phone-frame', {y:-10, duration:2.6, ease:'sine.inOut', yoyo:true, repeat:-1});
+          gsap.to('.afc-1', {y:-8, duration:3.2, ease:'sine.inOut', yoyo:true, repeat:-1});
+          gsap.to('.afc-2', {y:8, duration:2.8, ease:'sine.inOut', yoyo:true, repeat:-1});
+          gsap.to('.afc-3', {y:-6, duration:3.6, ease:'sine.inOut', yoyo:true, repeat:-1});
+        });
+
+      // ---- WHY ELA BENTO: cards rise in, staggered ----
+      gsap.from('.bt', {
+        opacity:0, y:36, scale:.96, duration:.75, stagger:.09, ease:'power3.out', clearProps:'transform',
+        scrollTrigger:{trigger:'.bento', start:'top 82%'}
+      });
+
+      // ---- SERVICE CARDS: staggered rise-in as the grid reaches viewport ----
+      gsap.from('.svc-grid .svc-card', {
+        opacity:0, y:28, duration:.6, stagger:.09, ease:'power3.out',
+        scrollTrigger:{trigger:'.svc-grid', start:'top 85%'}
+      });
+
+      // scroll-linked parallax on the card photos — alternating drift, tied to scroll (never autoplaying)
+      gsap.utils.toArray('.svc-card img:not(.veh)').forEach((img, i)=>{
+        const speed = (i % 2 === 0 ? -1 : 1) * (0.05 + (i % 3) * 0.02);
+        gsap.to(img, {
+          yPercent: speed * 100,
+          ease: 'none',
+          scrollTrigger:{ trigger: img.closest('.svc-card'), start:'top bottom', end:'bottom top', scrub:1.1 }
+        });
+      });
+
+      // ---- IMAGE REVEALS: about photo wipes + scales in ----
+      ['.about-media'].forEach(sel=>{
+        document.querySelectorAll(sel).forEach(media=>{
+          gsap.fromTo(media, {clipPath:'inset(0 0 100% 0)'}, {
+            clipPath:'inset(0 0 0% 0)', duration:.9, ease:'power4.inOut',
+            scrollTrigger:{trigger:media, start:'top 85%'}
+          });
+          gsap.fromTo(media.querySelector('img'), {scale:1.25}, {
+            scale:1.12, duration:1.2, ease:'power2.out',
+            scrollTrigger:{trigger:media, start:'top 85%'}
+          });
+        });
+      });
+
+      // ---- REVIEWS: reviewer rail slides in, stage rises, decorative rings breathe ----
+      gsap.from('.rv-item', {opacity:0, x:-28, duration:.6, stagger:.07, ease:'power3.out', clearProps:'transform', scrollTrigger:{trigger:'.rv-layout', start:'top 80%'}});
+      gsap.from('.rv-stage', {opacity:0, y:40, duration:.9, ease:'power3.out', clearProps:'transform', scrollTrigger:{trigger:'.rv-layout', start:'top 80%'}});
+      gsap.to('.rv-ring.a', {scale:1.12, duration:3.6, ease:'sine.inOut', yoyo:true, repeat:-1});
+      gsap.to('.rv-ring.b', {scale:.88, duration:3, ease:'sine.inOut', yoyo:true, repeat:-1});
+
+      // ---- TRUSTED-BY: strip fades in once, then the marquee runs continuously via CSS ----
+      gsap.from('.tb-track-wrap', {
+        opacity:0, y:12, duration:.6, ease:'power2.out',
+        scrollTrigger:{trigger:'.tb-track-wrap', start:'top 100%', once:true}
+      });
+
+      // ---- IMAGE BAND: text reveal (parallax handled below, unified) ----
+      const band = document.querySelector('.image-band');
+      if(band){
+        gsap.from(band.querySelectorAll('.msg, .msg span'), {
+          opacity:0, y:16, duration:.6, stagger:.1,
+          scrollTrigger:{trigger:band, start:'top 75%'}
+        });
+      }
+
+      // ============================================================
+      // SCROLL-LINKED PARALLAX
+      // Continuously tied to scroll position (scrub), not autoplay.
+      // Elements move up or down at different speeds for depth.
+      // A negative speed drifts the element upward as you scroll down;
+      // a positive speed drifts it downward. scrub:1 adds a gentle,
+      // premium lag so motion trails the scroll smoothly instead of
+      // snapping to it 1:1.
+      // ============================================================
+      const parallaxTargets = [
+        { el: '.image-band img',        speed:  0.16 },
+        { el: '.about-media img',       speed:  0.06 },
+        { el: '#about h2',              speed:  0.04 },
+      ];
+      parallaxTargets.forEach(({el, speed})=>{
+        document.querySelectorAll(el).forEach(node=>{
+          gsap.to(node, {
+            yPercent: speed * 100,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: node.closest('section, .stats, div') || node,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 1.1
+            }
+          });
+        });
+      });
+
+      // ---- SCROLL-PROGRESS RAIL (reference: vertical line + moving marker) ----
+      // Marker slides from 0% (top of .pr-track) to 100% (bottom) in lockstep
+      // with how far the user has scrolled through the whole document.
+      const prMarker = document.querySelector('.pr-marker');
+      if(prMarker){
+        gsap.to(prMarker, {
+          top: '100%',
+          ease: 'none',
+          scrollTrigger: {
+            trigger: document.body,
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 0.6
+          }
+        });
+      }
+
+    } catch(err){
+      console.error('ELA animation error — falling back to static visible content:', err);
+      showEverything();
+    }
+  }
+</script>
+<script src="booking-core.js"></script>
+<script src="booking-widget.js"></script>
+<script src="site.js"></script>
+
+</body>
+</html>

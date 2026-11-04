@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><title>Redirecting to booking…</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  (function(){
+    var m={click:'bike',transport:'seat',go:'go',haul:'haul'};
+    var t=new URLSearchParams(location.search).get('tab');
+    location.replace('book.html'+(t&&m[t]?'?tab='+m[t]:''));
+  })();
+</script>
+<meta http-equiv="refresh" content="1;url=book.html">
+</head><body style="font-family:sans-serif;padding:40px">Taking you to our <a href="book.html">booking page</a>…</body></html>
